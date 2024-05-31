@@ -1,0 +1,86 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    component: controller
+    release: kube-prometheus
+  name: controller-monitor
+  namespace: metallb-system
+spec:
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    honorLabels: true
+    interval: 30s
+    port: metrics
+    scheme: http
+  jobLabel: component
+  namespaceSelector:
+    matchNames:
+    - metallb-system
+  selector:
+    matchLabels:
+      name: controller-monitor-service
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    release: kube-prometheus
+    component: speaker
+  name: speaker-monitor
+  namespace: metallb-system
+spec:
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    honorLabels: true
+    interval: 30s
+    port: metrics
+    scheme: http
+  jobLabel: component
+  namespaceSelector:
+    matchNames:
+    - metallb-system
+  selector:
+    matchLabels:
+      name: speaker-monitor-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+  labels:
+    name: controller-monitor-service
+  name: controller-monitor-service
+  namespace: metallb-system
+spec:
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: 9120
+    targetPort: 7472
+  selector:
+    component: controller
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+  labels:
+    name: speaker-monitor-service
+  name: speaker-monitor-service
+  namespace: metallb-system
+spec:
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: 9120
+    targetPort: 7472
+  selector:
+    component: speaker
+  sessionAffinity: None
+  type: ClusterIP

@@ -1,0 +1,210 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": {
+                    "type": "grafana",
+                    "uid": "-- Grafana --"
+                },
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations \u0026 Alerts",
+                "type": "dashboard"
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 11,
+    "links": [],
+    "liveNow": true,
+    "panels": [
+        {
+            "datasource": {
+                "type": "loki",
+                "uid": "a411043c-c837-49b8-b16b-f465f19fe392"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "custom": {
+                        "align": "auto",
+                        "cellOptions": {
+                            "type": "color-text"
+                        },
+                        "filterable": false,
+                        "inspect": false
+                    },
+                    "mappings": [
+                        {
+                            "options": {
+                                "ERROR": {
+                                    "color": "red",
+                                    "index": 0,
+                                    "text": "ERROR"
+                                }
+                            },
+                            "type": "value"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "timestamp"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.width",
+                                "value": 158
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "context"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.width",
+                                "value": 130
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "level"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.width",
+                                "value": 69
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "timestamp"
+                        },
+                        "properties": [
+                            {
+                                "id": "unit",
+                                "value": "dateTimeAsIso"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 25,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 1,
+            "options": {
+                "cellHeight": "md",
+                "footer": {
+                    "countRows": false,
+                    "enablePagination": true,
+                    "fields": "",
+                    "reducer": [
+                        "sum"
+                    ],
+                    "show": false
+                },
+                "showHeader": true,
+                "sortBy": [
+                    {
+                        "desc": false,
+                        "displayName": "timestamp"
+                    }
+                ]
+            },
+            "pluginVersion": "10.0.3",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "loki",
+                        "uid": "a411043c-c837-49b8-b16b-f465f19fe392"
+                    },
+                    "editorMode": "builder",
+                    "expr": "{job=\"transmission\"} | json",
+                    "key": "Q-f6a02501-a983-4e4c-8398-3fe8605300a0-0",
+                    "legendFormat": "",
+                    "queryType": "range",
+                    "refId": "A"
+                }
+            ],
+            "title": "Transmission Script Logs",
+            "transformations": [
+                {
+                    "id": "extractFields",
+                    "options": {
+                        "format": "json",
+                        "keepTime": false,
+                        "replace": true,
+                        "source": "labels"
+                    }
+                },
+                {
+                    "id": "organize",
+                    "options": {
+                        "excludeByName": {
+                            "filename": true,
+                            "host": true,
+                            "job": true
+                        },
+                        "indexByName": {
+                            "context": 1,
+                            "filename": 2,
+                            "host": 3,
+                            "job": 4,
+                            "level": 5,
+                            "message": 6,
+                            "timestamp": 0
+                        },
+                        "renameByName": {}
+                    }
+                }
+            ],
+            "type": "table"
+        }
+    ],
+    "refresh": "5s",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+        "list": []
+    },
+    "time": {
+        "from": "2024-01-07T19:29:00.000Z",
+        "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Transmission Script Logs",
+    "uid": "a2ddb61b-6fd1-4896-a0a6-cec60555eb0b",
+    "version": 4,
+    "weekStart": ""
+}

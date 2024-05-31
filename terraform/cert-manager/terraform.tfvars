@@ -1,0 +1,1 @@
+../../secrets/cert-manager/terraform.tfvars

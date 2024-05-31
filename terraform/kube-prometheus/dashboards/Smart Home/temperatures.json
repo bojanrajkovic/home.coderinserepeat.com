@@ -1,0 +1,608 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 14,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlYlRd",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": -6,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "lastNotNull",
+            "variance"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Last *",
+          "sortDesc": false
+        },
+        "timezone": [
+          "browser"
+        ],
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "c9091479-27c8-4dd6-a675-c94948270d18"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Family Room Aqara Sensor Family Room Aqara Sensor temperature\"})",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Family Room",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "c9091479-27c8-4dd6-a675-c94948270d18"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Utility Room TuYa Sensor Utility Room TuYa Sensor temperature\"})",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Utility Room",
+          "range": true,
+          "refId": "B",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "c9091479-27c8-4dd6-a675-c94948270d18"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Laundry Room Aqara Sensor Laundry Room Aqara Sensor temperature\"})",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Laundry Room",
+          "range": true,
+          "refId": "C",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "c9091479-27c8-4dd6-a675-c94948270d18"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Humidor Sensor Humidor Sensor temperature\"})",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Humidor",
+          "range": true,
+          "refId": "D",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "c9091479-27c8-4dd6-a675-c94948270d18"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Patio Propane Tank Temperature\"})",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Patio",
+          "range": true,
+          "refId": "E",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "c9091479-27c8-4dd6-a675-c94948270d18"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Office Aqara Sensor Office Aqara Sensor temperature\"})",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Patio",
+          "range": true,
+          "refId": "F",
+          "useBackend": false
+        }
+      ],
+      "title": "Downstairs",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlYlRd",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisBorderShow": true,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "linearThreshold": 1,
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 1,
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "lastNotNull",
+            "variance"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Last *",
+          "sortDesc": false
+        },
+        "timezone": [
+          "browser"
+        ],
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "c9091479-27c8-4dd6-a675-c94948270d18"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "avg by(friendly_name) (homeassistant_sensor_temperature_celsius{friendly_name=~\"Living Room Aqara Sensor Living Room Aqara Sensor temperature\"})",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Living Room",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "c9091479-27c8-4dd6-a675-c94948270d18"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "avg by(friendly_name) (homeassistant_sensor_temperature_celsius{friendly_name=~\"Shelly Temperature\"})",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Fireplace Shelly",
+          "range": true,
+          "refId": "B",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "c9091479-27c8-4dd6-a675-c94948270d18"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "avg by(friendly_name) (homeassistant_sensor_temperature_celsius{friendly_name=~\"Deck Propane Tank Temperature\"})",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Deck",
+          "range": true,
+          "refId": "C",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "c9091479-27c8-4dd6-a675-c94948270d18"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "avg by(friendly_name) (homeassistant_sensor_temperature_celsius{friendly_name=~\"Kitchen Aqara Sensor Kitchen Aqara Sensor temperature\"})",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Kitchen",
+          "range": true,
+          "refId": "D",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "c9091479-27c8-4dd6-a675-c94948270d18"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "avg by(friendly_name) (homeassistant_sensor_temperature_celsius{friendly_name=~\"Garage Aqara Sensor Garage Aqara Sensor temperature\"})",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "Garage",
+          "range": true,
+          "refId": "E",
+          "useBackend": false
+        }
+      ],
+      "title": "Living Room",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlYlRd",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 1,
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Liv’s Room Aqara Sensor Liv’s Room Aqara Sensor temperature sensor.livs_room_aqara_sensor_temperature"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Liv's Room"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Ceiling Fan device temperature sensor.ceiling_fan_device_temperature"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Shelly (Girls' Bedroom)"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Emma’s Room Aqara Sensor Emma’s Room Aqara Sensor temperature sensor.emmas_room_aqara_sensor_temperature"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Girls' Bedroom"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Fan and Lights device temperature sensor.fan_and_lights_device_temperature"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Shelly (Girls' Playroom)"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "IBS-TH 09E9 Temperature sensor.ibs_th_09e9_temperature"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Attic"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Master Bedroom TuYa Sensor Master Bedroom TuYa Sensor temperature sensor.master_bedroom_tuya_sensor_temperature"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Main Bedroom"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "lastNotNull",
+            "variance"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "sortBy": "Last *",
+          "sortDesc": false
+        },
+        "timezone": [
+          "browser"
+        ],
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "c9091479-27c8-4dd6-a675-c94948270d18"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "avg by(friendly_name, entity) (homeassistant_sensor_temperature_celsius{friendly_name=~\"Emma’s Room Aqara Sensor Emma’s Room Aqara Sensor temperature|Liv’s Room Aqara Sensor Liv’s Room Aqara Sensor temperature|IBS-TH 09E9 Temperature|Master Bedroom TuYa Sensor Master Bedroom TuYa Sensor temperature|Fan and Lights device temperature|Ceiling Fan device temperature\"})",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{friendly_name}} {{entity}}",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Upstairs",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-12h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Temperatures",
+  "uid": "aea336f3-1f6e-46ef-ae55-7ebfbb38669e",
+  "version": 2,
+  "weekStart": ""
+}
