@@ -1,1 +1,1 @@
-../../secrets/backrest/terraform.tfvars
+../../secrets/backups/terraform.tfvars

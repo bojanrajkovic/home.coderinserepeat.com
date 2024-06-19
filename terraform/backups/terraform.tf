@@ -15,6 +15,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5"
     }
+
+    system = {
+      source  = "neuspaces/system"
+      version = "~> 0"
+    }
   }
 }
 
@@ -31,4 +36,14 @@ provider "aws" {
 provider "kubernetes" {
   config_path    = "~/.kube/config"
   config_context = "default"
+}
+
+provider "system" {
+  ssh {
+    host  = var.system_host
+    port  = 22
+    user  = var.system_username
+    agent = true
+  }
+  sudo = true
 }

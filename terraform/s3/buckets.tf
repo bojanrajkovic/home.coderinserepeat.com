@@ -21,6 +21,45 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "bucket" {
 
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "backups_bucket_lifecycle_configuration" {
+  bucket = "bojans-backups"
+
+  rule {
+    id     = "DeleteFull"
+    status = "Enabled"
+
+    filter {
+      prefix = "full/"
+    }
+
+    expiration {
+      days = 200
+    }
+  }
+
+  rule {
+    id     = "DeleteIncremental"
+    status = "Enabled"
+
+    filter {
+      prefix = "incremental/"
+    }
+
+    expiration {
+      days = 40
+    }
+  }
+
+  rule {
+    id     = "AbortIncompleteMultipartUpload"
+    status = "Enabled"
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 7
+    }
+  }
+}
+
 resource "aws_s3_bucket_versioning" "tfstate" {
   bucket = "rajkovic-homelab-tf-state"
 
