@@ -25,6 +25,7 @@ resource "system_file" "sanoid_config" {
 
 resource "system_file" "sanoid_pre_snapshot_sh" {
   path   = "/etc/sanoid/pre-snapshot.sh"
+  mode   = 755
   user   = "root"
   group  = "root"
   source = "../../secrets/backups/pre-snapshot.sh"
@@ -48,9 +49,8 @@ resource "healthchecksio_check" "pv_backup_checks" {
   name = "PV Backup (${each.key})"
   desc = "Backup for PersistentVolume ${each.key} (${each.value})"
 
-  grace    = 1800
-  timeout  = 3600
-  timezone = "EST"
+  grace   = 1800
+  timeout = 3600
 
   channels = [data.healthchecksio_channel.pushover.id]
 }
@@ -59,6 +59,7 @@ resource "system_file" "sanoid_post_snapshot_sh" {
   path  = "/etc/sanoid/post-snapshot.sh"
   user  = "root"
   group = "root"
+  mode  = 755
   content = templatefile("../../secrets/backups/post-snapshot.sh", {
     access_key  = aws_iam_access_key.restic_access_keys.id,
     secret_key  = aws_iam_access_key.restic_access_keys.secret,
