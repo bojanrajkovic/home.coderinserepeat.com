@@ -35,6 +35,26 @@ data "kubernetes_resources" "pvs" {
   kind        = "PersistentVolume"
 }
 
+data "healthchecksio_channel" "pushover" {
+  kind = "po"
+}
+
+resource "healthchecksio_check" "pv_backup_checks" {
+  for_each = {
+    for pv in data.kubernetes_resources.pvs.objects : substr(pv.spec.claimRef.name, 0, 26) => pv.metadata.name
+    if pv.spec.storageClassName == var.data_volume_storage_class
+  }
+
+  name = "PV Backup (${each.key})"
+  desc = "Backup for PersistentVolume ${each.key} (${each.value})"
+
+  grace    = 1800
+  timeout  = 3600
+  timezone = "EST"
+
+  channels = [data.healthchecksio_channel.pushover.id]
+}
+
 resource "system_file" "sanoid_post_snapshot_sh" {
   path  = "/etc/sanoid/post-snapshot.sh"
   user  = "root"
@@ -47,9 +67,11 @@ resource "system_file" "sanoid_post_snapshot_sh" {
       for pv in data.kubernetes_resources.pvs.objects : {
         name   = pv.metadata.name,
         target = "${pv.spec.claimRef.namespace}--${pv.spec.claimRef.name}"
+        hc_id  = healthchecksio_check.pv_backup_checks[substr(pv.spec.claimRef.name, 0, 26)].ping_url
       }
       if pv.spec.storageClassName == var.data_volume_storage_class
     ],
+
     restic_password = random_password.restic_pvc_repo_password.result
   })
 }

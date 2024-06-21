@@ -42,3 +42,14 @@ variable "system_username" {
   type        = string
   description = "The username to log in as"
 }
+
+variable "healthchecksio_host" {
+  type        = string
+  description = "Hostname for Healthchecks.io API"
+}
+
+variable "healthchecksio_api_key" {
+  type        = string
+  sensitive   = true
+  description = "Healthchecks.io API key"
+}

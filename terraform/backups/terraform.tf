@@ -20,6 +20,11 @@ terraform {
       source  = "neuspaces/system"
       version = "~> 0"
     }
+
+    healthchecksio = {
+      version = "~> 2"
+      source  = "kristofferahl/healthchecksio"
+    }
   }
 }
 
@@ -46,4 +51,9 @@ provider "system" {
     agent = true
   }
   sudo = true
+}
+
+provider "healthchecksio" {
+  api_key = var.healthchecksio_api_key
+  api_url = var.healthchecksio_host
 }
