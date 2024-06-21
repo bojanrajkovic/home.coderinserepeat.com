@@ -54,6 +54,35 @@ resource "system_file" "sanoid_post_snapshot_sh" {
   })
 }
 
+output "backrest_config_json" {
+  description = "JSON blob to copy into Backrest's config to have these PVC backups show up"
+  sensitive   = true
+  value = jsonencode([
+    for pv in data.kubernetes_resources.pvs.objects : {
+      id       = "${pv.spec.claimRef.namespace}--${pv.spec.claimRef.name}",
+      uri      = "s3:s3.amazonaws.com/${data.aws_s3_bucket.backups.bucket}/${pv.spec.claimRef.namespace}--${pv.spec.claimRef.name}",
+      password = random_password.restic_pvc_repo_password.result,
+      env = [
+        "AWS_ACCESS_KEY_ID=${aws_iam_access_key.restic_access_keys.id}",
+        "AWS_SECRET_ACCESS_KEY=${aws_iam_access_key.restic_access_keys.secret}"
+      ],
+      prunePolicy = {
+        schedule = {
+          maxFrequencyDays = 30
+        },
+        maxUnusedPercent = 25
+      },
+      checkPolicy = {
+        schedule = {
+          maxFrequencyDays = 30
+        },
+        readDataSubsetPercent = 10
+      },
+      autoUnlock    = true,
+      commandPrefix = {}
+  } if pv.spec.storageClassName == var.data_volume_storage_class])
+}
+
 resource "system_file" "sanoid_service" {
   path    = "/etc/systemd/system/sanoid.service"
   mode    = 644
