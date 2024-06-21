@@ -133,11 +133,11 @@ resource "system_file" "sanoid_timer" {
   group   = "root"
   content = <<EOT
 [Unit]
-Description=Run Sanoid Every 15 Minutes
+Description=Run Sanoid Every 20 Minutes
 Requires=sanoid.service
 
 [Timer]
-OnCalendar=*:0/15
+OnCalendar=*:0/20
 Persistent=true
 
 [Install]
