@@ -36,7 +36,7 @@ resource "aws_route53_record" "bojangl_es_google_dkim_record" {
   ttl     = 300
 
   records = [
-    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4/Q/0tH836jK51686T0bcibjbViNSGCbr+BEhA3xwp3gslWswACFqslTtfwQOlL48inI85C8\" \"vE17SqkJBfJ2A9rFO0FrHHK5CK3ebdhuv+Hu7laq4I+5nRm/Awv9ExrqvOztsOmL+kP5SWXKtc+cx4u2PiSjNAAHfTuu+BMpi7iSixhtLKqnK+6RTndlCIIsX0cvnxJmSzbtJX\" \"XiwyyDc8WGyNOl7W6d8qEop9bb7TfuhVSU297xOOhCj8lc4s/spiQZ21eWxWq+JZHXpm8RkMAA4tRuMFkrDR/3o+wZnV37+nzDEcci14Tc9L9QdXD7nRA0I2JFKCxpTdAWgRpKjwIDAQAB"
+    var.dkim_keys["bojangl.es"]
   ]
 }
 

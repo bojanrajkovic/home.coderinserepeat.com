@@ -24,11 +24,20 @@ resource "system_file" "sanoid_config" {
 }
 
 resource "system_file" "sanoid_pre_snapshot_sh" {
-  path   = "/etc/sanoid/pre-snapshot.sh"
-  mode   = 755
-  user   = "root"
-  group  = "root"
-  source = "../../secrets/backups/pre-snapshot.sh"
+  path  = "/etc/sanoid/pre-snapshot.sh"
+  mode  = 755
+  user  = "root"
+  group = "root"
+  content = templatefile("./pre-snapshot.sh", {
+    pvc_to_target_map = [
+      for pv in data.kubernetes_resources.pvs.objects : {
+        name   = pv.metadata.name,
+        target = "${pv.spec.claimRef.namespace}--${pv.spec.claimRef.name}"
+        hc_id  = healthchecksio_check.pv_backup_checks[substr(pv.spec.claimRef.name, 0, 26)].ping_url
+      }
+      if pv.spec.storageClassName == var.data_volume_storage_class
+    ]
+  })
 }
 
 data "kubernetes_resources" "pvs" {
@@ -60,7 +69,7 @@ resource "system_file" "sanoid_post_snapshot_sh" {
   user  = "root"
   group = "root"
   mode  = 755
-  content = templatefile("../../secrets/backups/post-snapshot.sh", {
+  content = templatefile("./post-snapshot.sh", {
     access_key  = aws_iam_access_key.restic_access_keys.id,
     secret_key  = aws_iam_access_key.restic_access_keys.secret,
     bucket_name = data.aws_s3_bucket.backups.bucket,
