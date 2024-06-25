@@ -61,17 +61,15 @@ for dataset in "$${datasets[@]}"; do
     fi
 
     pushd "$${mountdir}" >/dev/null 2>&1
-    restic -r "$${repo}" \
-        --compression max \
-        backup \
-        .
+    restic_output=$(restic -r "$${repo}" --compression max backup .)
+    restic_return=$?
     popd >/dev/null 2>&1
 
-    post_update "$${hc_url}/$?" "Finished upload of snapshot $${ds_with_snapshot} to $${repo}"
+    post_update "$${hc_url}/$${restic_return}" "Finished upload of snapshot $${ds_with_snapshot} to $${repo}: $${restic_output}"
 
-    post_update "$${hc_url}/$start" "Starting pruning of snapshot $${ds_with_snapshot} to $${repo}"
+    post_update "$${hc_url}/start" "Starting pruning of snapshot $${ds_with_snapshot} to $${repo}"
 
-    restic -r "$${repo}" \
+    restic_output=$(restic -r "$${repo}" \
         forget \
         --keep-hourly 48 \
         --keep-daily 7 \
@@ -79,8 +77,9 @@ for dataset in "$${datasets[@]}"; do
         --keep-monthly 6 \
         --keep-yearly 1 \
         --prune
+    )
 
-    post_update "$${hc_url}/$?" "Finished pruning of restic repo $${repo}"
+    post_update "$${hc_url}/$?" "Finished pruning of restic repo $${repo}: $${restic_output}"
 
     umount "$${mountdir}"
     rmdir "$${mountdir}"

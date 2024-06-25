@@ -1,5 +1,5 @@
 resource "grafana_folder" "folders" {
-  for_each = toset(["Compute", "Networking", "Cluster Components", "House Infrastructure", "Smart Home"])
+  for_each = toset(["Compute", "Networking", "Cluster Components", "House Infrastructure", "Smart Home", "Loki"])
   title    = each.value
 }
 

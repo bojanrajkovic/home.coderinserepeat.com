@@ -24,8 +24,8 @@ locals {
     "gateway.ingress.tls[0].hosts[0]"                              = var.loki_hostname
     "gateway.ingress.tls[0].secretName"                            = "loki-cert"
     "gateway.ingress.annotations.cert-manager\\.io/cluster-issuer" = "letsencrypt"
-    "monitoring.dashboards.enabled"                                = true
-    "monitoring.rules.enabled"                                     = true
+    "monitoring.dashboards.enabled"                                = false
+    "monitoring.rules.enabled"                                     = false
     "monitoring.serviceMonitor.enabled"                            = true
     "monitoring.serviceMonitor.labels.release"                     = "kube-prometheus"
   })
