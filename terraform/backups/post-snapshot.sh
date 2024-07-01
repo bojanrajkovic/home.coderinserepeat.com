@@ -48,7 +48,7 @@ for dataset in "$${datasets[@]}"; do
     mountdir="$${tempdir}/$${target}"
 
     sanoid_check=$(sanoid --monitor-snapshots 2>&1)
-    post_update "$${hc_url}/$?" "Finished snapshot $${snapshot} of $${dataset}: $${sanoid_check}"
+    post_update "$${hc_url}/$?" "Finished snapshot $${snapshot} of $${dataset}:"$'\n\n'"$${sanoid_check}"
     
     mkdir -p "$${mountdir}"
     zfs release restic "$${ds_with_snapshot}" || true
@@ -65,7 +65,7 @@ for dataset in "$${datasets[@]}"; do
     restic_return=$?
     popd >/dev/null 2>&1
 
-    post_update "$${hc_url}/$${restic_return}" "Finished upload of snapshot $${ds_with_snapshot} to $${repo}: $${restic_output}"
+    post_update "$${hc_url}/$${restic_return}" "Finished upload of snapshot $${ds_with_snapshot} to $${repo}:"$'\n\n'"$${restic_output}"
 
     post_update "$${hc_url}/start" "Starting pruning of snapshot $${ds_with_snapshot} to $${repo}"
 
@@ -79,7 +79,7 @@ for dataset in "$${datasets[@]}"; do
         --prune
     )
 
-    post_update "$${hc_url}/$?" "Finished pruning of restic repo $${repo}: $${restic_output}"
+    post_update "$${hc_url}/$?" "Finished pruning of restic repo $${repo}:"$'\n\n'"$${restic_output}"
 
     umount "$${mountdir}"
     rmdir "$${mountdir}"

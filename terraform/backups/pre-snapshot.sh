@@ -28,6 +28,6 @@ for dataset in "$${datasets[@]}"; do
     ds_basename=$(basename "$${dataset}")
     hc_url=$${PVC_NAME_TO_HEALTHCHECK_ID_MAP["$${ds_basename}"]}
 
-    post_update "$${hc_url}/start" "Starting snapshot $${snapshot} of dataset $${dataset} to $${repo}"
+    post_update "$${hc_url}/start" "Starting snapshot $${snapshot} of dataset $${dataset}"
   done
 done
