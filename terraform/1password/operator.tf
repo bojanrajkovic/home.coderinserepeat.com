@@ -2,6 +2,7 @@ resource "helm_release" "password_operator" {
   name       = "1password-operator"
   repository = "https://1password.github.io/connect-helm-charts/"
   chart      = "connect"
+  version    = "v1.15.0"
 
   set {
     name  = "connect.credentials"

@@ -22,6 +22,7 @@ resource "helm_release" "ipmi_exporter" {
   chart      = "prometheus-ipmi-exporter"
   name       = "ipmi-exporter"
   namespace  = var.namespace_name
+  version    = "v0.4.0"
 
   set {
     name  = "serviceMonitor.enabled"
