@@ -87,7 +87,7 @@ resource "kubernetes_deployment_v1" "transmission" {
 
         container {
           name  = "gluetun"
-          image = "docker.io/qmcgaw/gluetun"
+          image = "docker.io/qmcgaw/gluetun@sha256:3ef4b38852f3308fb4b9801975160168456f517853c3f2e9e9483e6aefb62065"
 
           security_context {
             capabilities {
@@ -126,7 +126,7 @@ resource "kubernetes_deployment_v1" "transmission" {
 
         container {
           name  = "transmission"
-          image = "lscr.io/linuxserver/transmission:4.0.6"
+          image = "lscr.io/linuxserver/transmission:4.0.6@sha256:11485d36b79282e31c8d3dc90846d26d0a984c24f124e45a28e5743974bb4ac7"
 
           env {
             name  = "PUID"

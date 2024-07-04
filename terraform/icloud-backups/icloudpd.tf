@@ -49,7 +49,7 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
       spec {
         container {
           name  = "icloud-pd"
-          image = "docker.io/icloudpd/icloudpd:latest"
+          image = "docker.io/icloudpd/icloudpd:latest@sha256:68dfd09e55eb20da488e446a2e6142688923133132e9276ef6300a4559a95215"
           stdin = true
           tty   = true
 
