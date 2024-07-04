@@ -126,7 +126,7 @@ resource "kubernetes_deployment_v1" "transmission" {
 
         container {
           name  = "transmission"
-          image = "lscr.io/linuxserver/transmission:4.0.6"
+          image = "lscr.io/linuxserver/transmission:2021.11.18"
 
           env {
             name  = "PUID"
