@@ -51,7 +51,7 @@ resource "kubernetes_deployment_v1" "radarr" {
       spec {
         container {
           name  = "radarr"
-          image = "lscr.io/linuxserver/radarr:5.6.0"
+          image = "lscr.io/linuxserver/radarr:5.7.0"
 
           env {
             name  = "PUID"
