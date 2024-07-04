@@ -127,7 +127,7 @@ resource "kubernetes_deployment_v1" "slskd" {
 
         container {
           name  = "slskd"
-          image = "docker.io/slskd/slskd:0.21.0"
+          image = "docker.io/slskd/slskd:0.21.1"
 
           port {
             container_port = 5030
