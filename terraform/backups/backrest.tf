@@ -56,7 +56,7 @@ resource "kubernetes_deployment_v1" "backrest" {
         node_name = "hagal"
 
         container {
-          image = "docker.io/garethgeorge/backrest:v1.1.0"
+          image = "docker.io/garethgeorge/backrest:v1.2.1"
           name  = "backrest"
 
           port {
