@@ -1,0 +1,5 @@
+[env]
+AWS_PROFILE = "default"
+
+[tools]
+opentofu = "1.7.2"
