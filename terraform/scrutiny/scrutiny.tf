@@ -90,7 +90,7 @@ resource "kubernetes_deployment_v1" "scrutiny" {
         node_name = "hagal"
 
         container {
-          image = "ghcr.io/analogj/scrutiny:master-omnibus"
+          image = "ghcr.io/analogj/scrutiny:master-omnibus@sha256:51240579aca148379fce5a469bb2fa470d016d14b687121e50a9c19fe2e930d7"
           name  = "scrutiny"
 
           port {

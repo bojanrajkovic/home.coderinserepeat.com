@@ -64,7 +64,7 @@ resource "kubernetes_deployment_v1" "octoprint" {
         node_name = "hagal"
 
         container {
-          image = "docker.io/octoprint/octoprint"
+          image = "docker.io/octoprint/octoprint@sha256:dcc74b1a6074972ba2fce80e1abc80e98e2603adcab771918d89abaed2e4c277"
           name  = "octoprint"
 
           env {

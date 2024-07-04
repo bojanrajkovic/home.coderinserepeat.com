@@ -87,7 +87,7 @@ resource "kubernetes_deployment_v1" "slskd" {
 
         container {
           name  = "gluetun"
-          image = "docker.io/qmcgaw/gluetun"
+          image = "docker.io/qmcgaw/gluetun@sha256:3ef4b38852f3308fb4b9801975160168456f517853c3f2e9e9483e6aefb62065"
 
           security_context {
             capabilities {
@@ -127,7 +127,7 @@ resource "kubernetes_deployment_v1" "slskd" {
 
         container {
           name  = "slskd"
-          image = "docker.io/slskd/slskd:0.21.1"
+          image = "docker.io/slskd/slskd:0.21.1@sha256:e4bb957f69e2679e79db40e5e083804d1459eba4914cc0e2b6f241437172773e"
 
           port {
             container_port = 5030

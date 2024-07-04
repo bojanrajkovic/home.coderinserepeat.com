@@ -92,7 +92,7 @@ resource "kubernetes_deployment_v1" "docspell" {
         // Docspell Restserver
         container {
           name  = "restserver"
-          image = "docker.io/docspell/restserver"
+          image = "docker.io/docspell/restserver@sha256:a4f0462035327d65bd3a7c2dbc89d576c4a6edea666fc20c834d77ffa453fa14"
 
           args = ["/var/docspell/docspell.conf"]
 
@@ -123,7 +123,7 @@ resource "kubernetes_deployment_v1" "docspell" {
         // Docspell Joex
         container {
           name  = "joex"
-          image = "docker.io/docspell/joex"
+          image = "docker.io/docspell/joex@sha256:3dfe7831b48db7535746626c3baad7216514b1201c742fc6150b19771097ba88"
 
           args = ["/var/docspell/docspell.conf"]
 
@@ -154,7 +154,7 @@ resource "kubernetes_deployment_v1" "docspell" {
         // Docspell Solr
         container {
           name  = "solr"
-          image = "docker.io/solr:9"
+          image = "docker.io/solr:9@sha256:496e55bb27ea8a6f5551ee11c4cae7df21f333afd0ed28ad98db20cb4b568e97"
 
           args = ["-f", "-Dsolr.modules=analysis-extras"]
 
