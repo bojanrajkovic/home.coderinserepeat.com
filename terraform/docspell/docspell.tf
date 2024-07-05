@@ -102,7 +102,7 @@ resource "kubernetes_deployment_v1" "docspell" {
         // Docspell Restserver
         container {
           name  = "restserver"
-          image = "docker.io/docspell/restserver@sha256:a4f0462035327d65bd3a7c2dbc89d576c4a6edea666fc20c834d77ffa453fa14"
+          image = "docker.io/docspell/restserver:v0.41.0@sha256:a4f0462035327d65bd3a7c2dbc89d576c4a6edea666fc20c834d77ffa453fa14"
           args  = ["/var/docspell/docspell.conf"]
 
           port {
@@ -132,7 +132,7 @@ resource "kubernetes_deployment_v1" "docspell" {
         // Docspell Joex
         container {
           name  = "joex"
-          image = "docker.io/docspell/joex@sha256:3dfe7831b48db7535746626c3baad7216514b1201c742fc6150b19771097ba88"
+          image = "docker.io/docspell/joex:v0.41.0@sha256:3dfe7831b48db7535746626c3baad7216514b1201c742fc6150b19771097ba88"
           args  = ["/var/docspell/docspell.conf"]
 
           port {

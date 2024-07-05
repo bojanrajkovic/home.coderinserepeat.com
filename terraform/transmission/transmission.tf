@@ -99,7 +99,7 @@ resource "kubernetes_deployment_v1" "transmission" {
 
         container {
           name  = "gluetun"
-          image = "docker.io/qmcgaw/gluetun@sha256:3ef4b38852f3308fb4b9801975160168456f517853c3f2e9e9483e6aefb62065"
+          image = "docker.io/qmcgaw/gluetun:v3.38.0@sha256:3ef4b38852f3308fb4b9801975160168456f517853c3f2e9e9483e6aefb62065"
 
           security_context {
             capabilities {
