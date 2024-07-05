@@ -43,19 +43,27 @@ resource "kubernetes_deployment_v1" "octoprint" {
 
   spec {
     replicas = 1
+
+    strategy {
+      type = "Recreate"
+    }
+
     selector {
       match_labels = {
         "app.kubernetes.io/name" = "octoprint"
       }
     }
+
     template {
       metadata {
         name      = "octoprint"
         namespace = kubernetes_namespace.octoprint.metadata[0].name
+
         labels = {
           "app.kubernetes.io/name" = "octoprint"
         }
       }
+
       spec {
         os {
           name = "linux"
@@ -106,6 +114,7 @@ resource "kubernetes_deployment_v1" "octoprint" {
 
         volume {
           name = var.data_volume_name
+
           persistent_volume_claim {
             claim_name = var.data_volume_name
           }
@@ -134,7 +143,7 @@ resource "kubernetes_service_v1" "octoprint" {
     }
 
     selector = {
-      "app.kubernetes.io/name" : "octoprint"
+      "app.kubernetes.io/name" = "octoprint"
     }
   }
 }
@@ -152,28 +161,30 @@ resource "kubernetes_ingress_v1" "octoprint" {
 
   spec {
     ingress_class_name = "traefik"
+
     rule {
       host = var.octoprint_host
+
       http {
         path {
-          path = "/"
+          path      = "/"
+          path_type = "Prefix"
+
           backend {
             service {
               name = "octoprint"
+
               port {
                 number = 80
               }
             }
           }
-          path_type = "Prefix"
         }
       }
     }
 
     tls {
-      hosts = [
-        var.octoprint_host,
-      ]
+      hosts       = [var.octoprint_host]
       secret_name = "octoprint-ingress-cert"
     }
   }

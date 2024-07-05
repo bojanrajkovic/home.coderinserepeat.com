@@ -1,21 +1,25 @@
 resource "kubernetes_namespace_v1" "transmission" {
   metadata {
     name = var.namespace_name
+
     labels = {
-      "operator.1password.io/auto-restart" : true
+      "operator.1password.io/auto-restart" = true
     }
   }
 }
 
 resource "kubernetes_manifest" "airvpn_credentials" {
   depends_on = [kubernetes_namespace_v1.transmission]
+
   manifest = {
     apiVersion = "onepassword.com/v1"
     kind       = "OnePasswordItem"
+
     metadata = {
       name      = var.airvpn_credentials_secret
       namespace = kubernetes_namespace_v1.transmission.metadata[0].name
     }
+
     spec = {
       itemPath = var.airvpn_credentials_1password_vault_item_id
     }
@@ -24,13 +28,16 @@ resource "kubernetes_manifest" "airvpn_credentials" {
 
 resource "kubernetes_persistent_volume_claim_v1" "transmission_config" {
   depends_on = [kubernetes_namespace_v1.transmission]
+
   metadata {
     name      = var.data_volume_name
     namespace = var.namespace_name
   }
+
   spec {
     storage_class_name = var.data_volume_storage_class
     access_modes       = ["ReadWriteOnce"]
+
     resources {
       requests = {
         storage = var.data_volume_size
@@ -54,6 +61,10 @@ resource "kubernetes_deployment_v1" "transmission" {
   spec {
     replicas = 1
 
+    strategy {
+      type = "Recreate"
+    }
+
     selector {
       match_labels = {
         "app.kubernetes.io/name" = "transmission"
@@ -64,6 +75,7 @@ resource "kubernetes_deployment_v1" "transmission" {
       metadata {
         name      = "transmission"
         namespace = kubernetes_namespace_v1.transmission.metadata[0].name
+
         labels = {
           "app.kubernetes.io/name" = "transmission"
         }
@@ -97,6 +109,7 @@ resource "kubernetes_deployment_v1" "transmission" {
 
           dynamic "env" {
             for_each = nonsensitive(keys(var.gluetun_configuration))
+
             content {
               name  = env.value
               value = var.gluetun_configuration[env.value]
@@ -105,6 +118,7 @@ resource "kubernetes_deployment_v1" "transmission" {
 
           env {
             name = "WIREGUARD_PRIVATE_KEY"
+
             value_from {
               secret_key_ref {
                 name = var.airvpn_credentials_secret
@@ -115,6 +129,7 @@ resource "kubernetes_deployment_v1" "transmission" {
 
           env {
             name = "WIREGUARD_PRESHARED_KEY"
+
             value_from {
               secret_key_ref {
                 name = var.airvpn_credentials_secret
@@ -200,6 +215,7 @@ resource "kubernetes_deployment_v1" "transmission" {
 
           content {
             name = volume.key
+
             host_path {
               type = "Directory"
               path = volume.value
@@ -230,7 +246,7 @@ resource "kubernetes_service_v1" "transmission" {
     }
 
     selector = {
-      "app.kubernetes.io/name" : "transmission"
+      "app.kubernetes.io/name" = "transmission"
     }
   }
 }
@@ -239,6 +255,7 @@ resource "kubernetes_ingress_v1" "transmission" {
   metadata {
     name      = "transmission"
     namespace = kubernetes_namespace_v1.transmission.metadata[0].name
+
     annotations = {
       "cert-manager.io/cluster-issuer" = "letsencrypt"
     }
@@ -246,20 +263,24 @@ resource "kubernetes_ingress_v1" "transmission" {
 
   spec {
     ingress_class_name = "traefik"
+
     rule {
       host = var.transmission_host
+
       http {
         path {
-          path = "/"
+          path      = "/"
+          path_type = "Prefix"
+
           backend {
             service {
               name = "transmission"
+
               port {
                 number = 80
               }
             }
           }
-          path_type = "Prefix"
         }
       }
     }

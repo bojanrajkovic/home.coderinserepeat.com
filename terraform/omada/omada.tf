@@ -5,6 +5,7 @@ locals {
 resource "kubernetes_namespace_v1" "omada" {
   metadata {
     name = var.namespace_name
+
     labels = {
       "operator.1password.io/auto-restart" = true
     }
@@ -13,13 +14,16 @@ resource "kubernetes_namespace_v1" "omada" {
 
 resource "kubernetes_persistent_volume_claim_v1" "omada_data" {
   depends_on = [kubernetes_namespace_v1.omada]
+
   metadata {
     name      = var.data_volume_name
     namespace = var.namespace_name
   }
+
   spec {
     storage_class_name = var.data_volume_storage_class
     access_modes       = ["ReadWriteOnce"]
+
     resources {
       requests = {
         storage = var.data_volume_size
@@ -30,13 +34,16 @@ resource "kubernetes_persistent_volume_claim_v1" "omada_data" {
 
 resource "kubernetes_persistent_volume_claim_v1" "omada_logs" {
   depends_on = [kubernetes_namespace_v1.omada]
+
   metadata {
     name      = var.logs_volume_name
     namespace = var.namespace_name
   }
+
   spec {
     storage_class_name = var.logs_volume_storage_class
     access_modes       = ["ReadWriteOnce"]
+
     resources {
       requests = {
         storage = var.logs_volume_size
@@ -60,6 +67,11 @@ resource "kubernetes_deployment_v1" "omada" {
   spec {
     replicas = 1
 
+    strategy {
+      type = "Recreate"
+    }
+
+
     selector {
       match_labels = {
         "app.kubernetes.io/name" = "omada-controller"
@@ -70,6 +82,7 @@ resource "kubernetes_deployment_v1" "omada" {
       metadata {
         name      = "omada-controller"
         namespace = var.namespace_name
+
         labels = {
           "app.kubernetes.io/name" = "omada-controller"
         }
@@ -139,6 +152,7 @@ resource "kubernetes_deployment_v1" "omada" {
 
         volume {
           name = var.data_volume_name
+
           persistent_volume_claim {
             claim_name = var.data_volume_name
           }
@@ -146,6 +160,7 @@ resource "kubernetes_deployment_v1" "omada" {
 
         volume {
           name = var.logs_volume_name
+
           persistent_volume_claim {
             claim_name = var.logs_volume_name
           }
@@ -159,10 +174,12 @@ resource "kubernetes_manifest" "omada_skip_verify" {
   manifest = {
     apiVersion = "traefik.io/v1alpha1"
     kind       = "ServersTransport"
+
     metadata = {
       "name"      = "omada-skipverify"
       "namespace" = var.namespace_name
     }
+
     spec = {
       insecureSkipVerify = true
     }
@@ -196,7 +213,7 @@ resource "kubernetes_service_v1" "omada" {
     }
 
     selector = {
-      "app.kubernetes.io/name" : "omada-controller"
+      "app.kubernetes.io/name" = "omada-controller"
     }
   }
 }
@@ -207,6 +224,7 @@ resource "kubernetes_ingress_v1" "omada" {
   metadata {
     name      = "omada"
     namespace = var.namespace_name
+
     annotations = {
       "cert-manager.io/cluster-issuer"           = "letsencrypt"
       "kubernetes.io/ingress.class"              = "traefik"
@@ -216,20 +234,24 @@ resource "kubernetes_ingress_v1" "omada" {
 
   spec {
     ingress_class_name = "traefik"
+
     rule {
       host = var.omada_host
+
       http {
         path {
-          path = "/"
+          path      = "/"
+          path_type = "Prefix"
+
           backend {
             service {
               name = "omada-srv"
+
               port {
                 number = 8043
               }
             }
           }
-          path_type = "Prefix"
         }
       }
     }

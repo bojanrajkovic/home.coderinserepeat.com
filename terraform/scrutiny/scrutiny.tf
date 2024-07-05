@@ -5,6 +5,7 @@ locals {
 resource "kubernetes_namespace" "scrutiny" {
   metadata {
     name = var.namespace_name
+
     labels = {
       "operator.1password.io/auto-restart" = true
     }
@@ -21,13 +22,16 @@ data "kubernetes_nodes" "hagal" {
 
 resource "kubernetes_persistent_volume_claim_v1" "scrutiny_config" {
   depends_on = [kubernetes_namespace.scrutiny]
+
   metadata {
     name      = var.config_volume_name
     namespace = var.namespace_name
   }
+
   spec {
     storage_class_name = var.config_volume_storage_class
     access_modes       = ["ReadWriteOnce"]
+
     resources {
       requests = {
         storage = var.config_volume_size
@@ -38,13 +42,16 @@ resource "kubernetes_persistent_volume_claim_v1" "scrutiny_config" {
 
 resource "kubernetes_persistent_volume_claim_v1" "scrutiny_influxdb" {
   depends_on = [kubernetes_namespace.scrutiny]
+
   metadata {
     name      = var.influxdb_volume_name
     namespace = var.namespace_name
   }
+
   spec {
     storage_class_name = var.influxdb_volume_storage_class
     access_modes       = ["ReadWriteOnce"]
+
     resources {
       requests = {
         storage = var.influxdb_volume_size
@@ -69,19 +76,27 @@ resource "kubernetes_deployment_v1" "scrutiny" {
 
   spec {
     replicas = 1
+
+    strategy {
+      type = "Recreate"
+    }
+
     selector {
       match_labels = {
         "app.kubernetes.io/name" = "scrutiny"
       }
     }
+
     template {
       metadata {
         name      = "scrutiny"
         namespace = kubernetes_namespace.scrutiny.metadata[0].name
+
         labels = {
           "app.kubernetes.io/name" = "scrutiny"
         }
       }
+
       spec {
         os {
           name = "linux"
@@ -163,6 +178,7 @@ resource "kubernetes_deployment_v1" "scrutiny" {
 
           content {
             name = basename(volume.value)
+
             host_path {
               type = "Directory"
               path = volume.value
@@ -194,7 +210,7 @@ resource "kubernetes_service_v1" "scrutiny" {
     }
 
     selector = {
-      "app.kubernetes.io/name" : "scrutiny"
+      "app.kubernetes.io/name" = "scrutiny"
     }
   }
 }
@@ -205,6 +221,7 @@ resource "kubernetes_ingress_v1" "scrutiny" {
   metadata {
     name      = "scrutiny"
     namespace = kubernetes_namespace.scrutiny.metadata[0].name
+
     annotations = {
       "cert-manager.io/cluster-issuer" = "letsencrypt"
     }
@@ -212,28 +229,30 @@ resource "kubernetes_ingress_v1" "scrutiny" {
 
   spec {
     ingress_class_name = "traefik"
+
     rule {
       host = var.scrutiny_host
+
       http {
         path {
-          path = "/"
+          path      = "/"
+          path_type = "Prefix"
+
           backend {
             service {
               name = "scrutiny"
+
               port {
                 number = 80
               }
             }
           }
-          path_type = "Prefix"
         }
       }
     }
 
     tls {
-      hosts = [
-        var.scrutiny_host,
-      ]
+      hosts       = [var.scrutiny_host]
       secret_name = "scrutiny-ingress-cert"
     }
   }

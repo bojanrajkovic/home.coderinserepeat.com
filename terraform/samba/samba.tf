@@ -1,5 +1,6 @@
 resource "system_packages_apt" "samba" {
   for_each = toset(["samba", "smbclient", "samba-vfs-modules"])
+
   package {
     name = each.value
   }

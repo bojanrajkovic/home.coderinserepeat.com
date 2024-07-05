@@ -6,6 +6,9 @@ resource "aws_iam_saml_provider" "gsuite" {
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "gsuite-saml-poweruser-role" {
+  max_session_duration = 3600
+  managed_policy_arns  = ["arn:aws:iam::aws:policy/PowerUserAccess"]
+
   assume_role_policy = jsonencode({
     Statement = [{
       Action = "sts:AssumeRoleWithSAML"
@@ -21,11 +24,6 @@ resource "aws_iam_role" "gsuite-saml-poweruser-role" {
     }]
     Version = "2012-10-17"
   })
-
-  managed_policy_arns = [
-    "arn:aws:iam::aws:policy/PowerUserAccess",
-  ]
-  max_session_duration = 3600
 }
 
 import {

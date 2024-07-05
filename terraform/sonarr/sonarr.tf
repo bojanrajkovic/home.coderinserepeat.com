@@ -1,21 +1,25 @@
 resource "kubernetes_namespace" "sonarr" {
   metadata {
     name = var.namespace_name
+
     labels = {
-      "operator.1password.io/auto-restart" : true
+      "operator.1password.io/auto-restart" = true
     }
   }
 }
 
 resource "kubernetes_persistent_volume_claim_v1" "sonarr" {
   depends_on = [kubernetes_namespace.sonarr]
+
   metadata {
     name      = var.data_volume_name
     namespace = var.namespace_name
   }
+
   spec {
     storage_class_name = var.data_volume_storage_class
     access_modes       = ["ReadWriteMany"]
+
     resources {
       requests = {
         storage = var.data_volume_size
@@ -35,6 +39,10 @@ resource "kubernetes_deployment_v1" "sonarr" {
   spec {
     replicas = 1
 
+    strategy {
+      type = "Recreate"
+    }
+
     selector {
       match_labels = {
         "app.kubernetes.io/name" = "sonarr"
@@ -45,6 +53,7 @@ resource "kubernetes_deployment_v1" "sonarr" {
       metadata {
         name      = "sonarr"
         namespace = kubernetes_namespace.sonarr.metadata[0].name
+
         labels = {
           "app.kubernetes.io/name" = "sonarr"
         }
@@ -109,6 +118,7 @@ resource "kubernetes_deployment_v1" "sonarr" {
 
         volume {
           name = "localtime"
+
           host_path {
             type = "File"
             path = "/etc/localtime"
@@ -121,6 +131,7 @@ resource "kubernetes_deployment_v1" "sonarr" {
 
           content {
             name = volume.key
+
             host_path {
               type = "Directory"
               path = volume.value
@@ -151,7 +162,7 @@ resource "kubernetes_service_v1" "sonarr" {
     }
 
     selector = {
-      "app.kubernetes.io/name" : "sonarr"
+      "app.kubernetes.io/name" = "sonarr"
     }
   }
 }
@@ -160,6 +171,7 @@ resource "kubernetes_ingress_v1" "sonarr" {
   metadata {
     name      = "sonarr"
     namespace = kubernetes_namespace.sonarr.metadata[0].name
+
     annotations = {
       "cert-manager.io/cluster-issuer" = "letsencrypt"
     }
@@ -167,20 +179,24 @@ resource "kubernetes_ingress_v1" "sonarr" {
 
   spec {
     ingress_class_name = "traefik"
+
     rule {
       host = var.sonarr_host
+
       http {
         path {
-          path = "/"
+          path      = "/"
+          path_type = "Prefix"
+
           backend {
             service {
               name = "sonarr"
+
               port {
                 number = 80
               }
             }
           }
-          path_type = "Prefix"
         }
       }
     }

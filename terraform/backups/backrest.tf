@@ -10,13 +10,16 @@ resource "kubernetes_namespace" "backrest" {
 
 resource "kubernetes_persistent_volume_claim_v1" "backrest_data" {
   depends_on = [kubernetes_namespace.backrest]
+
   metadata {
     name      = var.data_volume_name
     namespace = var.namespace_name
   }
+
   spec {
     storage_class_name = var.data_volume_storage_class
     access_modes       = ["ReadWriteMany"]
+
     resources {
       requests = {
         storage = var.data_volume_size
@@ -35,11 +38,17 @@ resource "kubernetes_deployment_v1" "backrest" {
 
   spec {
     replicas = 1
+
+    strategy {
+      type = "Recreate"
+    }
+
     selector {
       match_labels = {
         "app.kubernetes.io/name" = "backrest"
       }
     }
+
     template {
       metadata {
         name      = "backrest"
@@ -48,6 +57,7 @@ resource "kubernetes_deployment_v1" "backrest" {
           "app.kubernetes.io/name" = "backrest"
         }
       }
+
       spec {
         os {
           name = "linux"
@@ -101,6 +111,7 @@ resource "kubernetes_deployment_v1" "backrest" {
 
         volume {
           name = "backrest-data"
+
           persistent_volume_claim {
             claim_name = kubernetes_persistent_volume_claim_v1.backrest_data.metadata[0].name
           }
@@ -111,6 +122,7 @@ resource "kubernetes_deployment_v1" "backrest" {
 
           content {
             name = basename(volume.value)
+
             host_path {
               type = "Directory"
               path = volume.value
@@ -142,7 +154,7 @@ resource "kubernetes_service_v1" "backrest" {
     }
 
     selector = {
-      "app.kubernetes.io/name" : "backrest"
+      "app.kubernetes.io/name" = "backrest"
     }
   }
 }
@@ -153,6 +165,7 @@ resource "kubernetes_ingress_v1" "backrest" {
   metadata {
     name      = "backrest"
     namespace = kubernetes_namespace.backrest.metadata[0].name
+
     annotations = {
       "cert-manager.io/cluster-issuer" = "letsencrypt"
     }
@@ -160,20 +173,24 @@ resource "kubernetes_ingress_v1" "backrest" {
 
   spec {
     ingress_class_name = "traefik"
+
     rule {
       host = var.backrest_hostname
+
       http {
         path {
-          path = "/"
+          path      = "/"
+          path_type = "Prefix"
+
           backend {
             service {
               name = "backrest-srv"
+
               port {
                 number = 80
               }
             }
           }
-          path_type = "Prefix"
         }
       }
     }

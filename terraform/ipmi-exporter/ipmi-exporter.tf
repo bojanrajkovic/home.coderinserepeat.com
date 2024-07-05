@@ -10,6 +10,7 @@ locals {
 resource "kubernetes_namespace_v1" "ipmi_exporter" {
   metadata {
     name = var.namespace_name
+
     labels = {
       "operator.1password.io/auto-restart" = true
     }
@@ -58,25 +59,32 @@ resource "kubernetes_manifest" "ipmi_exporter_service_monitor" {
   manifest = {
     apiVersion = "monitoring.coreos.com/v1"
     kind       = "ServiceMonitor"
+
     metadata = {
       labels = {
         release = "kube-prometheus"
       }
+
       name      = "ipmi-exporter-prometheus-ipmi-exporter"
       namespace = var.namespace_name
     }
+
     spec = {
       endpoints = [{
-        path = "ipmi"
+        path       = "ipmi"
+        targetPort = 9290
+
         params = {
           target = var.scrape_targets
         }
-        targetPort = 9290
       }]
+
       jobLabel = "ipmi-exporter-prometheus-ipmi-exporter"
+
       namespaceSelector = {
         matchNames = [var.namespace_name]
       }
+
       selector = {
         matchLabels = {
           "app.kubernetes.io/instance" = "ipmi-exporter"

@@ -8,6 +8,7 @@ locals {
 resource "kubernetes_namespace" "external_dns" {
   metadata {
     name = var.namespace
+
     annotations = {
       "operator.1password.io/auto-restart" = true
     }
@@ -15,11 +16,16 @@ resource "kubernetes_namespace" "external_dns" {
 }
 
 resource "kubernetes_secret" "external_dns_aws_credentials" {
-  depends_on = [aws_iam_access_key.external_dns_access_keys, kubernetes_namespace.external_dns]
+  depends_on = [
+    aws_iam_access_key.external_dns_access_keys,
+    kubernetes_namespace.external_dns
+  ]
+
   metadata {
     name      = "prod-route53-credentials"
     namespace = var.namespace
   }
+
   data = {
     "secret-access-key" = aws_iam_access_key.external_dns_access_keys.secret
     "access-key-id"     = aws_iam_access_key.external_dns_access_keys.id

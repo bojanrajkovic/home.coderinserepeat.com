@@ -1,8 +1,9 @@
 resource "kubernetes_namespace" "docspell" {
   metadata {
     name = var.namespace
+
     labels = {
-      "operator.1password.io/auto-restart" : true
+      "operator.1password.io/auto-restart" = true
     }
   }
 }
@@ -16,6 +17,7 @@ resource "kubernetes_persistent_volume_claim_v1" "docspell_data_volume" {
   spec {
     access_modes       = ["ReadWriteOnce"]
     storage_class_name = var.volume_storage_class
+
     resources {
       requests = {
         storage = var.docspell_data_volume_size
@@ -33,6 +35,7 @@ resource "kubernetes_persistent_volume_claim_v1" "docspell_configuration_volume"
   spec {
     access_modes       = ["ReadWriteOnce"]
     storage_class_name = var.volume_storage_class
+
     resources {
       requests = {
         storage = var.docspell_configuration_volume_size
@@ -50,6 +53,7 @@ resource "kubernetes_persistent_volume_claim_v1" "solr_data_volume" {
   spec {
     access_modes       = ["ReadWriteOnce"]
     storage_class_name = var.volume_storage_class
+
     resources {
       requests = {
         storage = var.solr_volume_size
@@ -60,6 +64,7 @@ resource "kubernetes_persistent_volume_claim_v1" "solr_data_volume" {
 
 resource "kubernetes_deployment_v1" "docspell" {
   depends_on = [kubernetes_namespace.docspell]
+
   metadata {
     name      = "docspell"
     namespace = var.namespace
@@ -67,6 +72,10 @@ resource "kubernetes_deployment_v1" "docspell" {
 
   spec {
     replicas = 1
+
+    strategy {
+      type = "Recreate"
+    }
 
     selector {
       match_labels = {
@@ -78,6 +87,7 @@ resource "kubernetes_deployment_v1" "docspell" {
       metadata {
         name      = "docspell"
         namespace = var.namespace
+
         labels = {
           "app.kubernetes.io/name" = "docspell"
         }
@@ -93,8 +103,7 @@ resource "kubernetes_deployment_v1" "docspell" {
         container {
           name  = "restserver"
           image = "docker.io/docspell/restserver@sha256:a4f0462035327d65bd3a7c2dbc89d576c4a6edea666fc20c834d77ffa453fa14"
-
-          args = ["/var/docspell/docspell.conf"]
+          args  = ["/var/docspell/docspell.conf"]
 
           port {
             name           = "web-restserver"
@@ -124,8 +133,7 @@ resource "kubernetes_deployment_v1" "docspell" {
         container {
           name  = "joex"
           image = "docker.io/docspell/joex@sha256:3dfe7831b48db7535746626c3baad7216514b1201c742fc6150b19771097ba88"
-
-          args = ["/var/docspell/docspell.conf"]
+          args  = ["/var/docspell/docspell.conf"]
 
           port {
             name           = "web-joex"
@@ -155,8 +163,7 @@ resource "kubernetes_deployment_v1" "docspell" {
         container {
           name  = "solr"
           image = "docker.io/solr:9@sha256:496e55bb27ea8a6f5551ee11c4cae7df21f333afd0ed28ad98db20cb4b568e97"
-
-          args = ["-f", "-Dsolr.modules=analysis-extras"]
+          args  = ["-f", "-Dsolr.modules=analysis-extras"]
 
           port {
             name           = "web-solr"
@@ -173,6 +180,7 @@ resource "kubernetes_deployment_v1" "docspell" {
 
         volume {
           name = var.solr_data_volume
+
           persistent_volume_claim {
             claim_name = var.solr_data_volume
           }
@@ -180,6 +188,7 @@ resource "kubernetes_deployment_v1" "docspell" {
 
         volume {
           name = var.docspell_configuration_volume
+
           persistent_volume_claim {
             claim_name = var.docspell_configuration_volume
           }
@@ -187,6 +196,7 @@ resource "kubernetes_deployment_v1" "docspell" {
 
         volume {
           name = var.docspell_data_volume
+
           persistent_volume_claim {
             claim_name = var.docspell_data_volume
           }
@@ -215,7 +225,7 @@ resource "kubernetes_service_v1" "docspell" {
     }
 
     selector = {
-      "app.kubernetes.io/name" : "docspell"
+      "app.kubernetes.io/name" = "docspell"
     }
   }
 }
@@ -224,6 +234,7 @@ resource "kubernetes_ingress_v1" "docspell" {
   metadata {
     name      = "docspell"
     namespace = kubernetes_namespace.docspell.metadata[0].name
+
     annotations = {
       "cert-manager.io/cluster-issuer" = "letsencrypt"
     }
@@ -231,20 +242,24 @@ resource "kubernetes_ingress_v1" "docspell" {
 
   spec {
     ingress_class_name = "traefik"
+
     rule {
       host = var.docspell_host
+
       http {
         path {
-          path = "/"
+          path      = "/"
+          path_type = "Prefix"
+
           backend {
             service {
               name = "docspell"
+
               port {
                 number = 80
               }
             }
           }
-          path_type = "Prefix"
         }
       }
     }

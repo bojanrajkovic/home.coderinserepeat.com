@@ -1,21 +1,25 @@
 resource "kubernetes_namespace" "slskd" {
   metadata {
     name = var.namespace_name
+
     labels = {
-      "operator.1password.io/auto-restart" : true
+      "operator.1password.io/auto-restart" = true
     }
   }
 }
 
 resource "kubernetes_manifest" "airvpn_credentials" {
   depends_on = [kubernetes_namespace.slskd]
+
   manifest = {
     apiVersion = "onepassword.com/v1"
     kind       = "OnePasswordItem"
+
     metadata = {
       name      = var.airvpn_credentials_secret
       namespace = kubernetes_namespace.slskd.metadata[0].name
     }
+
     spec = {
       itemPath = var.airvpn_credentials_1password_vault_item_id
     }
@@ -24,13 +28,16 @@ resource "kubernetes_manifest" "airvpn_credentials" {
 
 resource "kubernetes_persistent_volume_claim_v1" "slskd_config" {
   depends_on = [kubernetes_namespace.slskd]
+
   metadata {
     name      = var.config_volume_name
     namespace = var.namespace_name
   }
+
   spec {
     storage_class_name = var.config_volume_storage_class
     access_modes       = ["ReadWriteOnce"]
+
     resources {
       requests = {
         storage = var.config_volume_size
@@ -54,6 +61,10 @@ resource "kubernetes_deployment_v1" "slskd" {
   spec {
     replicas = 1
 
+    strategy {
+      type = "Recreate"
+    }
+
     selector {
       match_labels = {
         "app.kubernetes.io/name" = "slskd"
@@ -64,6 +75,7 @@ resource "kubernetes_deployment_v1" "slskd" {
       metadata {
         name      = "slskd"
         namespace = kubernetes_namespace.slskd.metadata[0].name
+
         labels = {
           "app.kubernetes.io/name" = "slskd"
         }
@@ -106,6 +118,7 @@ resource "kubernetes_deployment_v1" "slskd" {
 
           env {
             name = "WIREGUARD_PRIVATE_KEY"
+
             value_from {
               secret_key_ref {
                 name = var.airvpn_credentials_secret
@@ -116,6 +129,7 @@ resource "kubernetes_deployment_v1" "slskd" {
 
           env {
             name = "WIREGUARD_PRESHARED_KEY"
+
             value_from {
               secret_key_ref {
                 name = var.airvpn_credentials_secret
@@ -168,6 +182,7 @@ resource "kubernetes_deployment_v1" "slskd" {
 
         volume {
           name = "localtime"
+
           host_path {
             type = "File"
             path = "/etc/localtime"
@@ -180,6 +195,7 @@ resource "kubernetes_deployment_v1" "slskd" {
 
           content {
             name = volume.key
+
             host_path {
               type = "Directory"
               path = volume.value
@@ -210,7 +226,7 @@ resource "kubernetes_service_v1" "slskd" {
     }
 
     selector = {
-      "app.kubernetes.io/name" : "slskd"
+      "app.kubernetes.io/name" = "slskd"
     }
   }
 }
@@ -219,6 +235,7 @@ resource "kubernetes_ingress_v1" "slskd" {
   metadata {
     name      = "slskd"
     namespace = kubernetes_namespace.slskd.metadata[0].name
+
     annotations = {
       "cert-manager.io/cluster-issuer" = "letsencrypt"
     }
@@ -226,20 +243,24 @@ resource "kubernetes_ingress_v1" "slskd" {
 
   spec {
     ingress_class_name = "traefik"
+
     rule {
       host = var.soulseek_host
+
       http {
         path {
-          path = "/"
+          path      = "/"
+          path_type = "Prefix"
+
           backend {
             service {
               name = "slskd"
+
               port {
                 number = 80
               }
             }
           }
-          path_type = "Prefix"
         }
       }
     }

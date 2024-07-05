@@ -10,6 +10,7 @@ data "aws_kms_alias" "aws_managed_s3_key" {
 resource "aws_s3_bucket_server_side_encryption_configuration" "bucket" {
   for_each = var.bucket_list
   bucket   = aws_s3_bucket.bucket[each.value].id
+
   rule {
     bucket_key_enabled = true
 

@@ -1,8 +1,9 @@
 resource "kubernetes_namespace" "icloud_pd" {
   metadata {
     name = var.namespace_name
+
     labels = {
-      "operator.1password.io/auto-restart" : true
+      "operator.1password.io/auto-restart" = true
     }
   }
 }
@@ -12,10 +13,12 @@ resource "kubernetes_manifest" "icloud_credentials" {
   manifest = {
     apiVersion = "onepassword.com/v1"
     kind       = "OnePasswordItem"
+
     metadata = {
       name      = var.icloud_password_secret
       namespace = kubernetes_namespace.icloud_pd.metadata[0].name
     }
+
     spec = {
       itemPath = var.icloud_password_1password_vault_item_id
     }
@@ -41,6 +44,7 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
       metadata {
         name      = "icloud-pd"
         namespace = kubernetes_namespace.icloud_pd.metadata[0].name
+
         labels = {
           "app.kubernetes.io/name" = "icloud-pd"
         }
@@ -112,6 +116,7 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
 
           content {
             name = volume.key
+
             host_path {
               type = "Directory"
               path = volume.value

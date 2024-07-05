@@ -1,21 +1,25 @@
 resource "kubernetes_namespace" "healthchecks_io" {
   metadata {
     name = var.namespace_name
+
     labels = {
-      "operator.1password.io/auto-restart" : true
+      "operator.1password.io/auto-restart" = true
     }
   }
 }
 
 resource "kubernetes_persistent_volume_claim_v1" "healthchecks_io" {
   depends_on = [kubernetes_namespace.healthchecks_io]
+
   metadata {
     name      = var.data_volume_name
     namespace = var.namespace_name
   }
+
   spec {
     storage_class_name = var.data_volume_storage_class
     access_modes       = ["ReadWriteMany"]
+
     resources {
       requests = {
         storage = var.data_volume_size
@@ -32,6 +36,10 @@ resource "kubernetes_deployment_v1" "healthchecks_io" {
 
   spec {
     replicas = 1
+
+    strategy {
+      type = "Recreate"
+    }
 
     selector {
       match_labels = {
@@ -57,12 +65,14 @@ resource "kubernetes_deployment_v1" "healthchecks_io" {
         init_container {
           name  = "fix-data-dir-ownership"
           image = "alpine:3@sha256:b89d9c93e9ed3597455c90a0b88a8bbb5cb7188438f70953fede212a0c4394e0"
+
           command = [
             "chown",
             "-R",
             "999:999",
             "/data"
           ]
+
           volume_mount {
             name       = var.data_volume_name
             mount_path = "/data"
@@ -172,7 +182,7 @@ resource "kubernetes_service_v1" "healthchecks_io" {
     }
 
     selector = {
-      "app.kubernetes.io/name" : "healthchecks-io"
+      "app.kubernetes.io/name" = "healthchecks-io"
     }
   }
 }
@@ -181,6 +191,7 @@ resource "kubernetes_ingress_v1" "healthchecks_io" {
   metadata {
     name      = "healthchecks-io"
     namespace = kubernetes_namespace.healthchecks_io.metadata[0].name
+
     annotations = {
       "cert-manager.io/cluster-issuer" = "letsencrypt"
     }
@@ -188,20 +199,24 @@ resource "kubernetes_ingress_v1" "healthchecks_io" {
 
   spec {
     ingress_class_name = "traefik"
+
     rule {
       host = var.healthchecks_host
+
       http {
         path {
-          path = "/"
+          path      = "/"
+          path_type = "Prefix"
+
           backend {
             service {
               name = "healthchecks-io"
+
               port {
                 number = 8000
               }
             }
           }
-          path_type = "Prefix"
         }
       }
     }

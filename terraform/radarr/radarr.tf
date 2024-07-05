@@ -1,21 +1,25 @@
 resource "kubernetes_namespace" "radarr" {
   metadata {
     name = var.namespace_name
+
     labels = {
-      "operator.1password.io/auto-restart" : true
+      "operator.1password.io/auto-restart" = true
     }
   }
 }
 
 resource "kubernetes_persistent_volume_claim_v1" "radarr" {
   depends_on = [kubernetes_namespace.radarr]
+
   metadata {
     name      = var.data_volume_name
     namespace = var.namespace_name
   }
+
   spec {
     storage_class_name = var.data_volume_storage_class
     access_modes       = ["ReadWriteMany"]
+
     resources {
       requests = {
         storage = var.data_volume_size
@@ -33,6 +37,10 @@ resource "kubernetes_deployment_v1" "radarr" {
   spec {
     replicas = 1
 
+    strategy {
+      type = "Recreate"
+    }
+
     selector {
       match_labels = {
         "app.kubernetes.io/name" = "radarr"
@@ -43,6 +51,7 @@ resource "kubernetes_deployment_v1" "radarr" {
       metadata {
         name      = "radarr"
         namespace = kubernetes_namespace.radarr.metadata[0].name
+
         labels = {
           "app.kubernetes.io/name" = "radarr"
         }
@@ -120,6 +129,7 @@ resource "kubernetes_deployment_v1" "radarr" {
 
           content {
             name = volume.key
+
             host_path {
               type = "Directory"
               path = volume.value
@@ -150,7 +160,7 @@ resource "kubernetes_service_v1" "radarr" {
     }
 
     selector = {
-      "app.kubernetes.io/name" : "radarr"
+      "app.kubernetes.io/name" = "radarr"
     }
   }
 }
@@ -159,6 +169,7 @@ resource "kubernetes_ingress_v1" "radarr" {
   metadata {
     name      = "radarr"
     namespace = kubernetes_namespace.radarr.metadata[0].name
+
     annotations = {
       "cert-manager.io/cluster-issuer" = "letsencrypt"
     }
@@ -166,20 +177,24 @@ resource "kubernetes_ingress_v1" "radarr" {
 
   spec {
     ingress_class_name = "traefik"
+
     rule {
       host = var.radarr_host
+
       http {
         path {
-          path = "/"
+          path      = "/"
+          path_type = "Prefix"
+
           backend {
             service {
               name = "radarr"
+
               port {
                 number = 7878
               }
             }
           }
-          path_type = "Prefix"
         }
       }
     }

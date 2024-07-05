@@ -1,6 +1,7 @@
 resource "kubernetes_namespace" "ustreamer" {
   metadata {
     name = var.namespace_name
+
     labels = {
       "operator.1password.io/auto-restart" = true
     }
@@ -26,19 +27,27 @@ resource "kubernetes_deployment_v1" "ustreamer" {
 
   spec {
     replicas = 1
+
+    strategy {
+      type = "Recreate"
+    }
+
     selector {
       match_labels = {
         "app.kubernetes.io/name" = "ustreamer"
       }
     }
+
     template {
       metadata {
         name      = "ustreamer"
         namespace = kubernetes_namespace.ustreamer.metadata[0].name
+
         labels = {
           "app.kubernetes.io/name" = "ustreamer"
         }
       }
+
       spec {
         os {
           name = "linux"
@@ -49,6 +58,7 @@ resource "kubernetes_deployment_v1" "ustreamer" {
         container {
           image = "mkuf/ustreamer:v6.12@sha256:c58425df2ad7ba2fbbd47a7a141ad117ab32894fb3d47fb188924d27f791a3a0"
           name  = "ustreamer"
+
           args = [
             "--format=mjpeg",
             "--encoder=hw",
@@ -109,7 +119,7 @@ resource "kubernetes_service_v1" "ustreamer" {
     }
 
     selector = {
-      "app.kubernetes.io/name" : "ustreamer"
+      "app.kubernetes.io/name" = "ustreamer"
     }
   }
 }
@@ -120,6 +130,7 @@ resource "kubernetes_ingress_v1" "ustreamer" {
   metadata {
     name      = "ustreamer"
     namespace = kubernetes_namespace.ustreamer.metadata[0].name
+
     annotations = {
       "cert-manager.io/cluster-issuer" = "letsencrypt"
     }
@@ -127,20 +138,24 @@ resource "kubernetes_ingress_v1" "ustreamer" {
 
   spec {
     ingress_class_name = "traefik"
+
     rule {
       host = var.ustreamer_host
+
       http {
         path {
-          path = "/"
+          path      = "/"
+          path_type = "Prefix"
+
           backend {
             service {
               name = "ustreamer"
+
               port {
                 number = 8080
               }
             }
           }
-          path_type = "Prefix"
         }
       }
     }
