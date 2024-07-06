@@ -9,13 +9,22 @@ variable "icloud_pd_host_volumes" {
   description = "The host volumes to mount into icloud-pd's container"
 }
 
-variable "icloud_password_secret" {
-  type        = string
-  description = "Secret name for the iCloud password"
+variable "pd_backup_apple_ids" {
+  type = map(string)
+  description = "The users whose iCloud Photos to back up"
 }
 
-variable "icloud_password_1password_vault_item_id" {
+variable "data_volume_name" {
   type        = string
-  sensitive   = true
-  description = "The 1Password vault item ID for the iCloud password"
+  description = "The name of the data volume to create via a PVC binding."
+}
+
+variable "data_volume_size" {
+  type        = string
+  description = "The size of the data volume to allocate to Backrest's configuration."
+}
+
+variable "data_volume_storage_class" {
+  type        = string
+  description = "The storage class to use when creating Backrest's data volume."
 }

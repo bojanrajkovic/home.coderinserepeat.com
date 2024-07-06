@@ -1,3 +1,13 @@
+data "terraform_remote_state" "ses" {
+  backend = "s3"
+
+  config = {
+    bucket = "rajkovic-homelab-tf-state"
+    key    = "aws/ses.tfstate"
+    region = "us-east-1"
+  }
+}
+
 resource "kubernetes_namespace" "icloud_pd" {
   metadata {
     name = var.namespace_name
@@ -8,45 +18,55 @@ resource "kubernetes_namespace" "icloud_pd" {
   }
 }
 
-resource "kubernetes_manifest" "icloud_credentials" {
+resource "kubernetes_persistent_volume_claim_v1" "icloud_auth" {
+  for_each = var.pd_backup_apple_ids
   depends_on = [kubernetes_namespace.icloud_pd]
-  manifest = {
-    apiVersion = "onepassword.com/v1"
-    kind       = "OnePasswordItem"
 
-    metadata = {
-      name      = var.icloud_password_secret
-      namespace = kubernetes_namespace.icloud_pd.metadata[0].name
-    }
+  metadata {
+    name      = "${var.data_volume_name}-${each.key}"
+    namespace = var.namespace_name
+  }
 
-    spec = {
-      itemPath = var.icloud_password_1password_vault_item_id
+  spec {
+    storage_class_name = var.data_volume_storage_class
+    access_modes       = ["ReadWriteMany"]
+
+    resources {
+      requests = {
+        storage = var.data_volume_size
+      }
     }
   }
 }
 
 resource "kubernetes_deployment_v1" "icloud_pd" {
+  for_each = var.pd_backup_apple_ids
+
   metadata {
-    name      = "icloud-pd"
+    name      = "icloud-pd-${each.key}"
     namespace = kubernetes_namespace.icloud_pd.metadata[0].name
   }
 
   spec {
     replicas = 1
 
+    strategy {
+      type = "Recreate"
+    }
+
     selector {
       match_labels = {
-        "app.kubernetes.io/name" = "icloud-pd"
+        "app.kubernetes.io/name" = "icloud-pd-${each.key}"
       }
     }
 
     template {
       metadata {
-        name      = "icloud-pd"
+        name      = "icloud-pd-${each.key}"
         namespace = kubernetes_namespace.icloud_pd.metadata[0].name
 
         labels = {
-          "app.kubernetes.io/name" = "icloud-pd"
+          "app.kubernetes.io/name" = "icloud-pd-${each.key}"
         }
       }
 
@@ -54,29 +74,29 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
         container {
           name  = "icloud-pd"
           image = "docker.io/icloudpd/icloudpd:1.21.0@sha256:87b69bbadf8434505ccd74d871f4404abb07e571d6e95a85f2a3aa7787044376"
-          stdin = true
-          tty   = true
 
           args = [
             "icloudpd",
-            "--directory", "/data/photos/iCloud",
-            "--username", "brajkovic@coderinserepeat.com",
+            "--directory", "/data/photos/iCloud (${title(each.key)})",
+            "--username", "${each.value}",
             "--watch-with-interval", "3600",
             "--auto-delete",
             "--align-raw", "original",
             "--no-progress-bar",
-            # "--password", "$(ICLOUD_PASSWORD)"
-            # "--mfa-provider", "webui"
+            "--password-provider", "webui",
+            "--mfa-provider", "webui",
+            "--smtp-username", data.terraform_remote_state.ses.outputs.smtp_username["icloudpd"],
+            "--smtp-password", data.terraform_remote_state.ses.outputs.smtp_password["icloudpd"],
+            "--smtp-host", "email-smtp.us-east-1.amazonaws.com",
+            "--notification-email", var.pd_backup_apple_ids["bojan"],
+            "--notification-email-from", data.terraform_remote_state.ses.outputs.sender_emails["icloudpd"],
+            "--cookie-directory", "/auth"
           ]
 
-          env {
-            name = "ICLOUD_PASSWORD"
-            value_from {
-              secret_key_ref {
-                name = var.icloud_password_secret
-                key  = "password"
-              }
-            }
+          port {
+            container_port = 8080
+            name = "webui"
+            protocol = "TCP"
           }
 
           env {
@@ -90,6 +110,11 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
             read_only  = true
           }
 
+          volume_mount {
+            mount_path = "/auth"
+            name = var.data_volume_name
+          }
+
           // Data
           dynamic "volume_mount" {
             for_each = var.icloud_pd_host_volumes
@@ -98,6 +123,14 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
               mount_path = "/data/${volume_mount.key}"
               name       = volume_mount.key
             }
+          }
+        }
+
+        volume {
+          name = var.data_volume_name
+
+          persistent_volume_claim {
+            claim_name = "${var.data_volume_name}-${each.key}"
           }
         }
 
