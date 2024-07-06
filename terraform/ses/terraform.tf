@@ -1,7 +1,11 @@
+locals {
+  module = basename(abspath(path.module))
+}
+
 terraform {
   backend "s3" {
     bucket = "rajkovic-homelab-tf-state"
-    key    = "aws/${basename(abspath(path.module))}.tfstate"
+    key    = "aws/${local.module}.tfstate"
     region = "us-east-1"
   }
 
@@ -17,7 +21,7 @@ provider "aws" {
   default_tags {
     tags = {
       "provisioned-by" = "terraform"
-      "module"         = basename(abspath(path.module))
+      "module"         = local.module
     }
   }
   region = "us-east-1"

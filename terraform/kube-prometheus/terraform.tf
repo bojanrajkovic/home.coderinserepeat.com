@@ -1,7 +1,11 @@
+locals {
+  module = basename(abspath(path.module))
+}
+
 terraform {
   backend "s3" {
     bucket = "rajkovic-homelab-tf-state"
-    key    = "k8s/kube-prometheus.tfstate"
+    key    = "k8s/${local.module}.tfstate"
     region = "us-east-1"
   }
 
@@ -28,13 +32,6 @@ provider "grafana" {
   auth = var.grafana_auth_key
 }
 
-provider "kubernetes" {
-  config_path    = "~/.kube/config"
-  config_context = "default"
-}
+provider "kubernetes" {}
 
-provider "helm" {
-  kubernetes {
-    config_path = "~/.kube/config"
-  }
-}
+provider "helm" {}

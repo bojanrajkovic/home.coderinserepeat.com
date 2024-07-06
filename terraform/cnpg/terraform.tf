@@ -1,7 +1,11 @@
+locals {
+  module = basename(abspath(path.module))
+}
+
 terraform {
   backend "s3" {
     bucket = "rajkovic-homelab-tf-state"
-    key    = "k8s/cnpg.tfstate"
+    key    = "k8s/${local.module}.tfstate"
     region = "us-east-1"
   }
 
@@ -13,8 +17,4 @@ terraform {
   }
 }
 
-provider "helm" {
-  kubernetes {
-    config_path = "~/.kube/config"
-  }
-}
+provider "helm" {}

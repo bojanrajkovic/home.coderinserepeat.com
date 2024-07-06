@@ -1,7 +1,11 @@
+locals {
+  module = basename(abspath(path.module))
+}
+
 terraform {
   backend "s3" {
     bucket = "rajkovic-homelab-tf-state"
-    key    = "k8s/external-dns.tfstate"
+    key    = "k8s/${local.module}.tfstate"
     region = "us-east-1"
   }
 
@@ -18,16 +22,13 @@ terraform {
   }
 }
 
-provider "kubernetes" {
-  config_path    = "~/.kube/config"
-  config_context = "default"
-}
+provider "kubernetes" {}
 
 provider "aws" {
   default_tags {
     tags = {
       "provisioned-by" = "terraform"
-      "module"         = "${basename(path.cwd)}"
+      "module"         = local.module
     }
   }
   region = "us-east-1"
