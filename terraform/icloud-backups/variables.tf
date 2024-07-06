@@ -10,7 +10,7 @@ variable "icloud_pd_host_volumes" {
 }
 
 variable "pd_backup_apple_ids" {
-  type = map(string)
+  type        = map(string)
   description = "The users whose iCloud Photos to back up"
 }
 
@@ -27,4 +27,9 @@ variable "data_volume_size" {
 variable "data_volume_storage_class" {
   type        = string
   description = "The storage class to use when creating Backrest's data volume."
+}
+
+variable "icloudpd_host" {
+  type        = string
+  description = "The hostname at which to expose icloudpd's WebUI(s)"
 }

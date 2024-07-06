@@ -19,7 +19,7 @@ resource "kubernetes_namespace" "icloud_pd" {
 }
 
 resource "kubernetes_persistent_volume_claim_v1" "icloud_auth" {
-  for_each = var.pd_backup_apple_ids
+  for_each   = var.pd_backup_apple_ids
   depends_on = [kubernetes_namespace.icloud_pd]
 
   metadata {
@@ -75,7 +75,7 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
           name  = "icloud-pd"
           image = "docker.io/icloudpd/icloudpd:1.21.0@sha256:87b69bbadf8434505ccd74d871f4404abb07e571d6e95a85f2a3aa7787044376"
 
-          args = [
+          args = sensitive([
             "icloudpd",
             "--directory", "/data/photos/iCloud (${title(each.key)})",
             "--username", "${each.value}",
@@ -91,12 +91,12 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
             "--notification-email", var.pd_backup_apple_ids["bojan"],
             "--notification-email-from", data.terraform_remote_state.ses.outputs.sender_emails["icloudpd"],
             "--cookie-directory", "/auth"
-          ]
+          ])
 
           port {
             container_port = 8080
-            name = "webui"
-            protocol = "TCP"
+            name           = "webui"
+            protocol       = "TCP"
           }
 
           env {
@@ -112,7 +112,7 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
 
           volume_mount {
             mount_path = "/auth"
-            name = var.data_volume_name
+            name       = var.data_volume_name
           }
 
           // Data
@@ -157,6 +157,81 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
           }
         }
       }
+    }
+  }
+}
+
+resource "kubernetes_service_v1" "icloud_pd" {
+  for_each = var.pd_backup_apple_ids
+
+  metadata {
+    name      = "icloud-pd-${each.key}"
+    namespace = kubernetes_namespace.icloud_pd.metadata[0].name
+  }
+
+  spec {
+    type                    = "ClusterIP"
+    internal_traffic_policy = "Cluster"
+    ip_families             = ["IPv4"]
+    ip_family_policy        = "SingleStack"
+
+    port {
+      name        = "webui"
+      port        = 8080
+      protocol    = "TCP"
+      target_port = "webui"
+    }
+
+    selector = {
+      "app.kubernetes.io/name" = "icloud-pd-${each.key}"
+    }
+  }
+}
+
+resource "kubernetes_ingress_v1" "icloud_pd" {
+  depends_on = [kubernetes_namespace.icloud_pd, kubernetes_service_v1.icloud_pd]
+
+  metadata {
+    name      = "icloud-pd"
+    namespace = kubernetes_namespace.icloud_pd.metadata[0].name
+
+    annotations = {
+      "cert-manager.io/cluster-issuer" = "letsencrypt"
+    }
+  }
+
+  spec {
+    ingress_class_name = "traefik"
+
+    dynamic "rule" {
+      for_each = var.pd_backup_apple_ids
+      iterator = id
+
+      content {
+        host = "${id.key}.${var.icloudpd_host}"
+
+        http {
+          path {
+            path      = "/"
+            path_type = "Prefix"
+
+            backend {
+              service {
+                name = "icloud-pd-${id.key}"
+
+                port {
+                  number = 8080
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    tls {
+      hosts       = [for key, value in var.pd_backup_apple_ids : "${key}.${var.icloudpd_host}"]
+      secret_name = "icloud-pd-ingress-cert"
     }
   }
 }
