@@ -73,7 +73,7 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
       spec {
         container {
           name  = "icloud-pd"
-          image = "docker.io/icloudpd/icloudpd:1.21.0@sha256:87b69bbadf8434505ccd74d871f4404abb07e571d6e95a85f2a3aa7787044376"
+          image = "docker.io/icloudpd/icloudpd:1.23.0@sha256:5fa9d556c18c18368a001fa78c2411d75dbe737ba47e94d608d92a99b3275b00"
 
           args = sensitive([
             "icloudpd",
