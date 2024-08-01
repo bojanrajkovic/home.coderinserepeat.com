@@ -122,7 +122,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Family Room Aqara Sensor Family Room Aqara Sensor temperature\"})",
+          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Family Room Aqara Sensor Temperature\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -138,7 +138,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Utility Room TuYa Sensor Utility Room TuYa Sensor temperature\"})",
+          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Utility Room TuYa Sensor Temperature\"})",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -155,7 +155,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Laundry Room Aqara Sensor Laundry Room Aqara Sensor temperature\"})",
+          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Laundry Room Aqara Sensor Temperature\"})",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -172,7 +172,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Humidor Sensor Humidor Sensor temperature\"})",
+          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Humidor Sensor Temperature\"})",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -206,7 +206,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Office Aqara Sensor Office Aqara Sensor temperature\"})",
+          "expr": "avg(homeassistant_sensor_temperature_celsius{friendly_name=~\"Office.*\"})",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -321,7 +321,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "avg by(friendly_name) (homeassistant_sensor_temperature_celsius{friendly_name=~\"Living Room Aqara Sensor Living Room Aqara Sensor temperature\"})",
+          "expr": "avg by(friendly_name) (homeassistant_sensor_temperature_celsius{friendly_name=~\"Living Room Aqara Sensor Living Room Aqara Sensor temperature|Living Room Aqara Sensor Temperature\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -371,7 +371,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "avg by(friendly_name) (homeassistant_sensor_temperature_celsius{friendly_name=~\"Kitchen Aqara Sensor Kitchen Aqara Sensor temperature\"})",
+          "expr": "avg by(friendly_name) (homeassistant_sensor_temperature_celsius{friendly_name=~\"Kitchen Aqara Sensor Kitchen Aqara Sensor temperature|Kitchen Aqara Sensor Temperature\"})",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -388,7 +388,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "avg by(friendly_name) (homeassistant_sensor_temperature_celsius{friendly_name=~\"Garage Aqara Sensor Garage Aqara Sensor temperature\"})",
+          "expr": "avg by(friendly_name) (homeassistant_sensor_temperature_celsius{friendly_name=~\"Garage Aqara Sensor Garage Aqara Sensor temperature|Garage Aqara Sensor Temperature\"})",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -467,7 +467,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Liv’s Room Aqara Sensor Liv’s Room Aqara Sensor temperature sensor.livs_room_aqara_sensor_temperature"
+              "options": "Liv’s Room Aqara Sensor Temperature sensor.livs_room_aqara_sensor_temperature"
             },
             "properties": [
               {
@@ -491,7 +491,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Emma’s Room Aqara Sensor Emma’s Room Aqara Sensor temperature sensor.emmas_room_aqara_sensor_temperature"
+              "options": "Emma’s Room Aqara Sensor Temperature sensor.emmas_room_aqara_sensor_temperature"
             },
             "properties": [
               {
@@ -527,7 +527,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Master Bedroom TuYa Sensor Master Bedroom TuYa Sensor temperature sensor.master_bedroom_tuya_sensor_temperature"
+              "options": "Master Bedroom TuYa Sensor Temperature sensor.master_bedroom_tuya_sensor_temperature"
             },
             "properties": [
               {
@@ -575,7 +575,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "avg by(friendly_name, entity) (homeassistant_sensor_temperature_celsius{friendly_name=~\"Emma’s Room Aqara Sensor Emma’s Room Aqara Sensor temperature|Liv’s Room Aqara Sensor Liv’s Room Aqara Sensor temperature|IBS-TH 09E9 Temperature|Master Bedroom TuYa Sensor Master Bedroom TuYa Sensor temperature|Fan and Lights device temperature|Ceiling Fan device temperature\"})",
+          "expr": "avg by(friendly_name, entity) (homeassistant_sensor_temperature_celsius{friendly_name=~\"Emma’s Room Aqara Sensor Emma’s Room Aqara Sensor temperature|Liv’s Room Aqara Sensor Liv’s Room Aqara Sensor temperature|IBS-TH 09E9 Temperature|Master Bedroom TuYa Sensor Master Bedroom TuYa Sensor temperature|Fan and Lights device temperature|Ceiling Fan device temperature|Emma’s Room Aqara Sensor Temperature|Liv’s Room Aqara Sensor Temperature|Master Bedroom TuYa Sensor Temperature\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -596,13 +596,13 @@
     "list": []
   },
   "time": {
-    "from": "now-12h",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Temperatures",
   "uid": "aea336f3-1f6e-46ef-ae55-7ebfbb38669e",
-  "version": 2,
+  "version": 4,
   "weekStart": ""
 }

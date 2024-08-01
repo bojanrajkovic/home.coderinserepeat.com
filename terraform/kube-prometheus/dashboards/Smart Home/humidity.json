@@ -86,7 +86,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Family Room Aqara Sensor Family Room Aqara Sensor humidity"
+              "options": "Family Room Aqara Sensor Humidity"
             },
             "properties": [
               {
@@ -98,7 +98,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Humidor Sensor Humidor Sensor humidity"
+              "options": "Humidor Sensor Humidity"
             },
             "properties": [
               {
@@ -110,7 +110,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Laundry Room Aqara Sensor Laundry Room Aqara Sensor humidity"
+              "options": "Laundry Room Aqara Sensor Humidity"
             },
             "properties": [
               {
@@ -122,7 +122,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Utility Room TuYa Sensor Utility Room TuYa Sensor humidity"
+              "options": "Utility Room TuYa Sensor Humidity"
             },
             "properties": [
               {
@@ -165,7 +165,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "homeassistant_sensor_humidity_percent{friendly_name=~\"Family Room Aqara Sensor Family Room Aqara Sensor humidity|Humidor Sensor Humidor Sensor humidity|Utility Room TuYa Sensor Utility Room TuYa Sensor humidity|Laundry Room Aqara Sensor Laundry Room Aqara Sensor humidity\"}",
+          "expr": "homeassistant_sensor_humidity_percent{friendly_name=~\"Family Room Aqara Sensor Humidity|Humidor Sensor Humidity|Utility Room TuYa Sensor Humidity|Laundry Room Aqara Sensor Humidity\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -242,7 +242,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Garage Aqara Sensor Garage Aqara Sensor humidity"
+              "options": "Garage Aqara Sensor Humidity"
             },
             "properties": [
               {
@@ -254,7 +254,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Kitchen Aqara Sensor Kitchen Aqara Sensor humidity"
+              "options": "Kitchen Aqara Sensor Humidity"
             },
             "properties": [
               {
@@ -266,7 +266,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Living Room Aqara Sensor Living Room Aqara Sensor humidity"
+              "options": "Living Room Aqara Sensor Humidity"
             },
             "properties": [
               {
@@ -309,7 +309,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "homeassistant_sensor_humidity_percent{friendly_name=~\"Garage Aqara Sensor Garage Aqara Sensor humidity|Kitchen Aqara Sensor Kitchen Aqara Sensor humidity|Living Room Aqara Sensor Living Room Aqara Sensor humidity\"}",
+          "expr": "homeassistant_sensor_humidity_percent{friendly_name=~\"Garage Aqara Sensor Humidity|Kitchen Aqara Sensor Humidity|Living Room Aqara Sensor Humidity\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -386,7 +386,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Emma’s Room Aqara Sensor Emma’s Room Aqara Sensor humidity"
+              "options": "Emma’s Room Aqara Sensor Humidity"
             },
             "properties": [
               {
@@ -410,7 +410,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Liv’s Room Aqara Sensor Liv’s Room Aqara Sensor humidity"
+              "options": "Liv’s Room Aqara Sensor Humidity"
             },
             "properties": [
               {
@@ -422,7 +422,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Master Bedroom TuYa Sensor Master Bedroom TuYa Sensor humidity"
+              "options": "Master Bedroom TuYa Sensor Humidity"
             },
             "properties": [
               {
@@ -465,7 +465,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "homeassistant_sensor_humidity_percent{friendly_name=~\"Emma’s Room Aqara Sensor Emma’s Room Aqara Sensor humidity|IBS-TH 09E9 Humidity|Liv’s Room Aqara Sensor Liv’s Room Aqara Sensor humidity|Master Bedroom TuYa Sensor Master Bedroom TuYa Sensor humidity\"}",
+          "expr": "homeassistant_sensor_humidity_percent{friendly_name=~\"IBS-TH 09E9 Humidity|Emma’s Room Aqara Sensor Humidity|Master Bedroom TuYa Sensor Humidity|Liv’s Room Aqara Sensor Humidity\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -475,7 +475,7 @@
           "useBackend": false
         }
       ],
-      "title": "Lower Level",
+      "title": "Upper Level",
       "type": "timeseries"
     }
   ],
@@ -486,13 +486,13 @@
     "list": []
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Humidity",
   "uid": "adopex6drsg74a",
-  "version": 2,
+  "version": 5,
   "weekStart": ""
 }

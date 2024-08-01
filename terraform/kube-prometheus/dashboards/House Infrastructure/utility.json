@@ -31,39 +31,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "bars",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "percent"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
@@ -81,23 +49,29 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 12,
+        "w": 9,
         "x": 0,
         "y": 0
       },
       "id": 3,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
+        "colorMode": "background_solid",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "showPercentChange": true,
+        "textMode": "auto",
+        "wideLayout": true
       },
+      "pluginVersion": "11.1.0",
       "targets": [
         {
           "datasource": {
@@ -117,7 +91,7 @@
         }
       ],
       "title": "UPS Battery Level",
-      "type": "timeseries"
+      "type": "stat"
     },
     {
       "datasource": {
@@ -183,8 +157,8 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 12,
-        "x": 12,
+        "w": 15,
+        "x": 9,
         "y": 0
       },
       "id": 4,
@@ -193,6 +167,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -200,11 +175,11 @@
           "fields": "",
           "values": false
         },
-        "showPercentChange": false,
+        "showPercentChange": true,
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "10.4.1",
+      "pluginVersion": "11.1.0",
       "targets": [
         {
           "datasource": {
@@ -603,7 +578,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "homeassistant_sensor_carbon_dioxide_ppm{friendly_name=~\"Master Bedroom TuYa Sensor Master Bedroom TuYa Sensor co2|Utility Room TuYa Sensor Utility Room TuYa Sensor co2\"}",
+          "expr": "homeassistant_sensor_carbon_dioxide_ppm{friendly_name=~\"Master Bedroom TuYa Sensor Master Bedroom TuYa Sensor co2|Utility Room TuYa Sensor Utility Room TuYa Sensor co2|Master Bedroom TuYa Sensor Carbon dioxide|Utility Room TuYa Sensor Carbon dioxide\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -703,7 +678,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "homeassistant_sensor_unit_ppb{friendly_name=\"Master Bedroom TuYa Sensor Master Bedroom TuYa Sensor formaldehyd\"}",
+          "expr": "homeassistant_sensor_unit_ppb{friendly_name=\"Master Bedroom TuYa Sensor Formaldehyd\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -719,7 +694,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "(24.45 * homeassistant_sensor_unit_u0xb5g_per_mu0xb3{friendly_name=\"Utility Room TuYa Sensor Utility Room TuYa Sensor formaldehyd\"}) / 30.031",
+          "expr": "(24.45 * homeassistant_sensor_unit_u0xb5g_per_mu0xb3{friendly_name=\"Utility Room TuYa Sensor Formaldehyd\"}) / 30.031",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -984,7 +959,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "homeassistant_sensor_unit_ppm{entity=~\"sensor.utility_room_tuya_sensor_voc|sensor.master_bedroom_tuya_sensor_voc\"}",
+          "expr": "homeassistant_sensor_volatile_organic_compounds_parts_ppm{entity=~\"sensor.utility_room_tuya_sensor_voc|sensor.master_bedroom_tuya_sensor_voc\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -1012,6 +987,6 @@
   "timezone": "",
   "title": "Utility Measurements",
   "uid": "c7812b05-49eb-481e-836f-87401eff6991",
-  "version": 3,
+  "version": 8,
   "weekStart": ""
 }
