@@ -61,7 +61,7 @@ resource "kubernetes_deployment_v1" "the_lounge" {
 
       spec {
         container {
-          image = "ghcr.io/thelounge/thelounge:4.4.3@sha256:b0fd1d3bd5a95f4a380df464c69fae70ebdd9d7d401ca77fe5d44c2e63599dac"
+          image = "ghcr.io/thelounge/thelounge:4.4.3@sha256:dc044d9c82bc7e8ef5a5fa3b9b0043ecdeff34b7741c60d27a1a4ef5a17db288"
           name  = "the-lounge"
 
           port {
