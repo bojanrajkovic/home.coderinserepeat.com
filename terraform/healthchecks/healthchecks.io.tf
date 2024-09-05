@@ -81,7 +81,7 @@ resource "kubernetes_deployment_v1" "healthchecks_io" {
 
         container {
           name  = "healthchecks-io"
-          image = "healthchecks/healthchecks:v3.4@sha256:daef2ebf30cce0927a94703fea18360fe1a723d545a6567b11ea8a0cd12a960e"
+          image = "healthchecks/healthchecks:v3.6@sha256:916fc7cf65140577e475d71418749c68f9013409af0fd5588b26989205aa2732"
 
           env {
             name  = "ALLOWED_HOSTS"
