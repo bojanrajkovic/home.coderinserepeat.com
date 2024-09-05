@@ -132,7 +132,7 @@ resource "kubernetes_deployment_v1" "docspell" {
         // Docspell Joex
         container {
           name  = "joex"
-          image = "docker.io/docspell/joex:v0.41.0@sha256:3dfe7831b48db7535746626c3baad7216514b1201c742fc6150b19771097ba88"
+          image = "docker.io/docspell/joex:v0.42.0@sha256:b21d2285e49c0869d827dcba631ff10d574c673eb8df2ebf7fc1f326d0afd581"
           args  = ["/var/docspell/docspell.conf"]
 
           port {
