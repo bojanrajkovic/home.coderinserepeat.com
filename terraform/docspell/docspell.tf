@@ -102,7 +102,7 @@ resource "kubernetes_deployment_v1" "docspell" {
         // Docspell Restserver
         container {
           name  = "restserver"
-          image = "docker.io/docspell/restserver:v0.41.0@sha256:a4f0462035327d65bd3a7c2dbc89d576c4a6edea666fc20c834d77ffa453fa14"
+          image = "docker.io/docspell/restserver:v0.42.0@sha256:7184e723dcdd5241f02372748ad0aab6caca0722478abc892dc63c663e399f2d"
           args  = ["/var/docspell/docspell.conf"]
 
           port {
