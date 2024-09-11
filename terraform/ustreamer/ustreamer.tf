@@ -56,7 +56,7 @@ resource "kubernetes_deployment_v1" "ustreamer" {
         node_name = "hagal"
 
         container {
-          image = "mkuf/ustreamer:v6.12@sha256:c58425df2ad7ba2fbbd47a7a141ad117ab32894fb3d47fb188924d27f791a3a0"
+          image = "mkuf/ustreamer:v6.16@sha256:56505ddfce9f265d51b0ed4aaef531c08830c3952515eba55aa0c93ce7a16ae6"
           name  = "ustreamer"
 
           args = [
