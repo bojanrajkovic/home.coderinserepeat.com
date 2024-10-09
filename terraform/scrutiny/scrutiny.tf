@@ -138,15 +138,23 @@ resource "kubernetes_deployment_v1" "scrutiny" {
           resources {
             requests = {
               for capacity
-              in keys(data.kubernetes_nodes.hagal.nodes[0].status[0].capacity) :
+              in[
+                for key in keys(data.kubernetes_nodes.hagal.nodes[0].status[0].capacity) :
+                key
+                if length(regexall("smarter-devices/sd.*", key)) > 0
+              ] :
               capacity => 1
-              if length(regexall("smarter-devices/sd.*", capacity)) > 0
+              if tonumber(data.kubernetes_nodes.hagal.nodes[0].status[0].capacity[capacity]) > 0
             }
             limits = {
               for capacity
-              in keys(data.kubernetes_nodes.hagal.nodes[0].status[0].capacity) :
+              in[
+                for key in keys(data.kubernetes_nodes.hagal.nodes[0].status[0].capacity) :
+                key
+                if length(regexall("smarter-devices/sd.*", key)) > 0
+              ] :
               capacity => 1
-              if length(regexall("smarter-devices/sd.*", capacity)) > 0
+              if tonumber(data.kubernetes_nodes.hagal.nodes[0].status[0].capacity[capacity]) > 0
             }
           }
 
