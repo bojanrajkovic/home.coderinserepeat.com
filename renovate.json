@@ -5,7 +5,11 @@
     ":enableVulnerabilityAlerts"
   ],
   "kubernetes": {
-    "fileMatch": ["^.*/manifests/.*\\.yaml"]
+    "fileMatch": ["^.*/manifests/.*\\.yaml"],
+    "automerge": true
+  },
+  "terraform": {
+    "automerge": true
   },
   "packageRules": [
     {
