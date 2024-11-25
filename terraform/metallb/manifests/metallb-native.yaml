@@ -1792,7 +1792,7 @@ spec:
           value: app=metallb,component=speaker
         - name: METALLB_ML_SECRET_KEY_PATH
           value: /etc/ml_secret_key
-        image: quay.io/metallb/speaker:main@sha256:6900dc1f8182d0c7d16f14e7a3ddb4c9a5e35803f27a81176feb78f64c7ffe76
+        image: quay.io/metallb/speaker:main@sha256:5c491d1d4e854a38941bb575ecb90b810300c9d70d99a0f806a2e2b6a2669268
         livenessProbe:
           failureThreshold: 3
           httpGet:
