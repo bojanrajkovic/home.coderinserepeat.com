@@ -1,5 +1,17 @@
 locals {
   host_volumes = toset(["/run/udev"])
+  resources = tomap({ for capacity
+    in[
+      for key in [
+        for key in keys(data.kubernetes_nodes.hagal.nodes[0].status[0].capacity) :
+        key
+        if length(regexall("^.*sd[a-z]$", key)) > 0
+      ] :
+      key
+      if tonumber(data.kubernetes_nodes.hagal.nodes[0].status[0].capacity[key]) > 0
+    ] :
+    capacity => 1
+  })
 }
 
 resource "kubernetes_namespace" "scrutiny" {
@@ -136,26 +148,8 @@ resource "kubernetes_deployment_v1" "scrutiny" {
           }
 
           resources {
-            requests = {
-              for capacity
-              in[
-                for key in keys(data.kubernetes_nodes.hagal.nodes[0].status[0].capacity) :
-                key
-                if length(regexall("smarter-devices/sd.*", key)) > 0
-              ] :
-              capacity => 1
-              if tonumber(data.kubernetes_nodes.hagal.nodes[0].status[0].capacity[capacity]) > 0
-            }
-            limits = {
-              for capacity
-              in[
-                for key in keys(data.kubernetes_nodes.hagal.nodes[0].status[0].capacity) :
-                key
-                if length(regexall("smarter-devices/sd.*", key)) > 0
-              ] :
-              capacity => 1
-              if tonumber(data.kubernetes_nodes.hagal.nodes[0].status[0].capacity[capacity]) > 0
-            }
+            requests = local.resources
+            limits   = local.resources
           }
 
           security_context {
