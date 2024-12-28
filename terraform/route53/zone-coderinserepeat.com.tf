@@ -2,6 +2,10 @@ data "aws_cloudfront_distribution" "coderinserepeat_com" {
   id = var.www_coderinserepeat_com_cloudformation_distribution_id
 }
 
+data "aws_cloudfront_distribution" "test_coderinserepeat_com" {
+  id = var.test_coderinserepeat_com_cloudformation_distribution_id
+}
+
 data "aws_s3_bucket" "test_coderinserepeat_com" {
   bucket = "test.coderinserepeat.com"
 }
@@ -148,8 +152,8 @@ resource "aws_route53_record" "test_coderinserepeat_com_A" {
 
   alias {
     evaluate_target_health = true
-    name                   = data.aws_s3_bucket.test_coderinserepeat_com.website_domain
-    zone_id                = data.aws_s3_bucket.test_coderinserepeat_com.hosted_zone_id
+    name                   = data.aws_cloudfront_distribution.test_coderinserepeat_com.domain_name
+    zone_id                = data.aws_cloudfront_distribution.test_coderinserepeat_com.hosted_zone_id
   }
 }
 

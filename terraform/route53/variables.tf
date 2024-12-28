@@ -31,6 +31,11 @@ variable "www_coderinserepeat_com_cloudformation_distribution_id" {
   description = "Cloudfront distribution ID for coderinserepeat.com"
 }
 
+variable "test_coderinserepeat_com_cloudformation_distribution_id" {
+  type        = string
+  description = "Cloudfront distribution ID for test.coderinserepeat.com"
+}
+
 variable "handclaps_io_cloudfront_distribution_id" {
   type        = string
   description = "Cloudfront distribution ID for handclaps.io"
