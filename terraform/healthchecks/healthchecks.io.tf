@@ -64,7 +64,7 @@ resource "kubernetes_deployment_v1" "healthchecks_io" {
 
         init_container {
           name  = "fix-data-dir-ownership"
-          image = "alpine:3@sha256:1e42bbe2508154c9126d48c2b8a75420c3544343bf86fd041fb7527e017a4b4a"
+          image = "alpine:3@sha256:21dc6063fd678b478f57c0e13f47560d0ea4eeba26dfc947b2a4f81f686b9f45"
 
           command = [
             "chown",
