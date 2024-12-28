@@ -3,26 +3,26 @@ data "aws_route53_zone" "services_domain" {
 }
 
 resource "aws_ses_domain_identity" "services_domain_ses_identity" {
- domain = var.ses_domain
+  domain = var.ses_domain
 }
 
 resource "aws_route53_record" "services_amazonses_identity_record" {
   zone_id = data.aws_route53_zone.services_domain.zone_id
-  name = "_amazonses.${var.ses_domain}"
-  type = "TXT"
+  name    = "_amazonses.${var.ses_domain}"
+  type    = "TXT"
   records = [aws_ses_domain_identity.services_domain_ses_identity.verification_token]
-  ttl = "60"
+  ttl     = "60"
 }
 
 resource "aws_ses_domain_identity_verification" "services_ses_verification" {
   depends_on = [aws_route53_record.services_amazonses_identity_record]
-  
+
   domain = var.ses_domain
 }
 
 resource "aws_ses_domain_dkim" "services_domain_ses_dkim" {
-  depends_on = [ aws_ses_domain_identity_verification.services_ses_verification ]
-  
+  depends_on = [aws_ses_domain_identity_verification.services_ses_verification]
+
   domain = var.ses_domain
 }
 
@@ -37,15 +37,15 @@ resource "aws_route53_record" "services_amazonses_dkim_record" {
 
 resource "aws_route53_record" "services_amazonses_dmarc_record" {
   zone_id = data.aws_route53_zone.services_domain.zone_id
-  name = "_dmarc.${var.ses_domain}"
-  type = "TXT"
-  ttl = "600"
+  name    = "_dmarc.${var.ses_domain}"
+  type    = "TXT"
+  ttl     = "600"
   records = ["v=DMARC1; p=quarantine;"]
 }
 
 resource "aws_iam_user" "sender_users" {
-  depends_on = [ aws_ses_domain_identity_verification.services_ses_verification ]
-  for_each = var.ses_senders
+  depends_on = [aws_ses_domain_identity_verification.services_ses_verification]
+  for_each   = var.ses_senders
 
   name = "SesEmailSender-${each.key}"
 }
