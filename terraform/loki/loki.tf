@@ -1,7 +1,7 @@
 locals {
   values = tomap({
     "deploymentMode"                                               = "SingleBinary"
-    "loki.authEnabled"                                             = false
+    "loki.auth_enabled"                                            = false
     "loki.commonConfig.replication_factor"                         = 1
     "loki.storage.type"                                            = "filesystem"
     "loki.schemaConfig.configs[0].from"                            = "2024-01-01"
