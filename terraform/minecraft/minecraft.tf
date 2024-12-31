@@ -114,6 +114,16 @@ resource "kubernetes_deployment_v1" "minecraft" {
             name  = "OPS"
             value = "2533274880326726"
           }
+
+          env {
+            name  = "DIFFICULTY"
+            value = "easy"
+          }
+
+          env {
+            name  = "LEVEL_SEED"
+            value = "8486672581758651406"
+          }
         }
 
         volume {
