@@ -62,7 +62,7 @@ resource "kubernetes_deployment_v1" "sonarr" {
       spec {
         container {
           name  = "sonarr"
-          image = "lscr.io/linuxserver/sonarr:4.0.11@sha256:ca4ad72f07e532d1d414435eb43193d1dc407255e46c21c2694653ca8af4fd81"
+          image = "lscr.io/linuxserver/sonarr:4.0.12@sha256:ca71add37a9cdbb914c7bd5b06f98bf5d2062848c8de6ac3ee09e69a4c170b27"
 
           env {
             name  = "PUID"
