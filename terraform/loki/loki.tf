@@ -37,7 +37,7 @@ resource "helm_release" "loki" {
   chart            = "loki"
   namespace        = var.namespace_name
   create_namespace = true
-  version          = "6.24.0"
+  version          = "6.27.0"
 
   dynamic "set" {
     for_each = local.values
