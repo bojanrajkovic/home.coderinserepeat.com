@@ -122,7 +122,7 @@ resource "kubernetes_deployment_v1" "minecraft" {
 
           env {
             name  = "LEVEL_SEED"
-            value = "8486672581758651406"
+            value = "2171425265347214990"
           }
         }
 
@@ -148,6 +148,7 @@ resource "kubernetes_service_v1" "minecraft" {
     annotations = {
       "external-dns.alpha.kubernetes.io/hostname"  = var.minecraft_host
       "metallb.universe.tf/ip-allocated-from-pool" = "metallb-address-pool"
+      "metallb.io/ip-allocated-from-pool"          = "metallb-address-pool"
     }
   }
 
