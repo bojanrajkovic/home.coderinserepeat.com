@@ -1,13 +1,3 @@
-data "terraform_remote_state" "ses" {
-  backend = "s3"
-
-  config = {
-    bucket = "rajkovic-homelab-tf-state"
-    key    = "aws/ses.tfstate"
-    region = "us-east-1"
-  }
-}
-
 resource "kubernetes_namespace" "icloud_pd" {
   metadata {
     name = var.namespace_name
@@ -75,7 +65,7 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
           name  = "icloud-pd"
           image = "docker.io/icloudpd/icloudpd:1.26.1@sha256:0c40bc77eff7d185733e10e790ae6c64a4a03b725457a7d9b00315999aa358ea"
 
-          args = sensitive([
+          args = [
             "icloudpd",
             "--directory", "/data/photos/iCloud (${title(each.key)})",
             "--username", "${each.value}",
@@ -85,13 +75,8 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
             "--no-progress-bar",
             "--password-provider", "webui",
             "--mfa-provider", "webui",
-            "--smtp-username", data.terraform_remote_state.ses.outputs.smtp_username["icloudpd"],
-            "--smtp-password", data.terraform_remote_state.ses.outputs.smtp_password["icloudpd"],
-            "--smtp-host", "email-smtp.us-east-1.amazonaws.com",
-            "--notification-email", var.pd_backup_apple_ids["bojan"],
-            "--notification-email-from", data.terraform_remote_state.ses.outputs.sender_emails["icloudpd"],
             "--cookie-directory", "/auth"
-          ])
+          ]
 
           port {
             container_port = 8080
