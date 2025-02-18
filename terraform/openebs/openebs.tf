@@ -4,7 +4,7 @@ resource "helm_release" "zfs-localpv" {
   chart            = "zfs-localpv"
   namespace        = "openebs"
   create_namespace = true
-  version          = "2.6.2"
+  version          = "2.7.1"
 }
 
 resource "kubernetes_storage_class_v1" "zfs-durable" {
