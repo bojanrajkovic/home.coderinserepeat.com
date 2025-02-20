@@ -93,7 +93,7 @@ resource "kubernetes_deployment_v1" "omada" {
         dns_policy   = "ClusterFirstWithHostNet"
 
         container {
-          image = "mbentley/omada-controller:5.15-chromium@sha256:38d09142887315ae37060cc80e4d2419a6b3c271d73d11099dbd9f7d9964578d"
+          image = "mbentley/omada-controller:5.15-chromium@sha256:ca0eef17be47ea0fbc7ed8c9c94e19f641d55dc99dbe623534348b2f81be76cd"
           name  = "omada-controller"
 
           env {
