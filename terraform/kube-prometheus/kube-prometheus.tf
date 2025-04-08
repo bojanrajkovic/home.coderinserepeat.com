@@ -18,7 +18,7 @@ resource "helm_release" "kube_prometheus" {
   chart            = "kube-prometheus-stack"
   namespace        = "kube-prometheus"
   create_namespace = true
-  version          = "69.3.2"
+  version          = "69.8.2"
 
   dynamic "set" {
     for_each = toset([
