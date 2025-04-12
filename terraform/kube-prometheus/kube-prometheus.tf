@@ -63,7 +63,9 @@ resource "helm_release" "kube_prometheus" {
       "kubeProxy.enabled",
       "kubeScheduler.enabled",
       "alertmanager.enabled",
-      "grafana.defaultDashboardsEnabled"
+      "grafana.defaultDashboardsEnabled",
+      "grafana.sidecar.dashboards.enabled",
+      "grafana.sidecar.datasources.enabled"
     ])
     iterator = item
 
