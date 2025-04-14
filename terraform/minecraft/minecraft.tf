@@ -61,7 +61,7 @@ resource "kubernetes_deployment_v1" "minecraft" {
 
       spec {
         container {
-          image = "itzg/minecraft-bedrock-server@sha256:b6d6aee5c4ad095b93933d94101b92c9632e6952c4a32836e602b04cbbcca027"
+          image = "itzg/minecraft-bedrock-server@sha256:eb1991a2cb1750e6e2baa485e8d0beef8d525975ccd9ed90f157abfaade31af1"
           name  = "minecraft"
 
           port {
