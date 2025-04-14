@@ -8,6 +8,13 @@ resource "kubernetes_namespace" "healthchecks_io" {
   }
 }
 
+data "kubernetes_secret_v1" "postgres_credentials" {
+  metadata {
+    name      = "healthchecks-cluster-app"
+    namespace = var.namespace_name
+  }
+}
+
 resource "kubernetes_persistent_volume_claim_v1" "healthchecks_io" {
   depends_on = [kubernetes_namespace.healthchecks_io]
 
@@ -115,12 +122,27 @@ resource "kubernetes_deployment_v1" "healthchecks_io" {
 
           env {
             name  = "DB"
-            value = "sqlite"
+            value = "postgres"
           }
 
           env {
             name  = "DB_NAME"
-            value = "/data/hc.sqlite"
+            value = data.kubernetes_secret_v1.postgres_credentials.data["dbname"]
+          }
+
+          env {
+            name  = "DB_HOST"
+            value = data.kubernetes_secret_v1.postgres_credentials.data["host"]
+          }
+
+          env {
+            name  = "DB_PASSWORD"
+            value = data.kubernetes_secret_v1.postgres_credentials.data["password"]
+          }
+
+          env {
+            name  = "DB_USER"
+            value = data.kubernetes_secret_v1.postgres_credentials.data["username"]
           }
 
           port {

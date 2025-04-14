@@ -35,3 +35,8 @@ variable "pushover_subscription_url" {
   sensitive   = true
   description = "The Pushover Subscription URL."
 }
+
+variable "postgres_hostname" {
+  type        = string
+  description = "The hostname of the PostgreSQL database."
+}
