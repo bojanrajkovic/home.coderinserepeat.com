@@ -4,6 +4,8 @@
     "config:best-practices",
     ":enableVulnerabilityAlerts"
   ],
+  "automerge": true,
+  "ignoreTests": true,
   "kubernetes": {
     "fileMatch": ["^.*/manifests/.*\\.yaml"],
     "automerge": true
