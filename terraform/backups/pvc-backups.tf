@@ -63,24 +63,23 @@ resource "healthchecksio_check" "pv_backup_checks" {
   channels = [data.healthchecksio_channel.pushover.id]
 }
 
-resource "system_file" "sanoid_post_snapshot_sh" {
-  path  = "/etc/sanoid/post-snapshot.sh"
+resource "system_file" "sanoid_post_snapshot_py" {
+  path  = "/etc/sanoid/post-snapshot.py"
   user  = "root"
   group = "root"
   mode  = 755
 
-  content = templatefile("./post-snapshot.sh", {
+  content = templatefile("./post-snapshot.py", {
     access_key  = aws_iam_access_key.restic_access_keys.id,
     secret_key  = aws_iam_access_key.restic_access_keys.secret,
     bucket_name = data.aws_s3_bucket.backups.bucket,
-    pvc_to_target_map = [
-      for pv in data.kubernetes_resources.pvs.objects : {
-        name   = pv.metadata.name,
+    pvc_to_target_map = {
+      for pv in data.kubernetes_resources.pvs.objects : pv.metadata.name => {
         target = "${pv.spec.claimRef.namespace}--${pv.spec.claimRef.name}"
         hc_id  = healthchecksio_check.pv_backup_checks[substr(pv.spec.claimRef.name, 0, 26)].ping_url
       }
       if pv.spec.storageClassName == var.data_volume_storage_class
-    ],
+    },
 
     restic_password = random_password.restic_pvc_repo_password.result
   })
@@ -93,6 +92,7 @@ output "backrest_config_json" {
   value = jsonencode([
     for pv in data.kubernetes_resources.pvs.objects : {
       id       = "${pv.spec.claimRef.namespace}--${pv.spec.claimRef.name}",
+      guid     = replace("${pv.spec.claimRef.uid}${pv.spec.claimRef.uid}", "-", "")
       uri      = "s3:s3.amazonaws.com/${data.aws_s3_bucket.backups.bucket}/${pv.spec.claimRef.namespace}--${pv.spec.claimRef.name}",
       password = random_password.restic_pvc_repo_password.result,
       env = [
@@ -102,12 +102,14 @@ output "backrest_config_json" {
       prunePolicy = {
         schedule = {
           maxFrequencyDays = 30
+          clock            = "CLOCK_LAST_RUN_TIME"
         },
         maxUnusedPercent = 25
       },
       checkPolicy = {
         schedule = {
           maxFrequencyDays = 30
+          clock            = "CLOCK_LAST_RUN_TIME"
         },
         readDataSubsetPercent = 10
       },
