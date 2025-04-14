@@ -51,3 +51,8 @@ variable "google_client_secret" {
   sensitive   = true
   description = "The Google OAuth client secret for the Outline installation"
 }
+
+variable "postgres_hostname" {
+  type        = string
+  description = "The hostname of the PostgreSQL database for Outline"
+}
