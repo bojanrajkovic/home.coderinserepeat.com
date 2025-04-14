@@ -4,6 +4,7 @@ import subprocess
 import json
 import requests
 from typing import Tuple, Optional, List, Dict
+from enum import Enum
 
 # Set environment variables
 os.environ["AWS_SECRET_ACCESS_KEY"] = "${secret_key}"
@@ -11,6 +12,14 @@ os.environ["AWS_ACCESS_KEY_ID"] = "${access_key}"
 os.environ["AWS_REGION"] = "us-east-1"
 os.environ["RESTIC_PASSWORD"] = "${restic_password}"
 os.environ["XDG_CACHE_HOME"] = "/etc/sanoid/"
+
+class Task(Enum):
+    NONE = 0
+    INDEX_SNAPSHOTS = 1
+    PRUNE = 2
+    CHECK = 3
+    STATS = 4
+    UNLOCK = 5
 
 # Constants
 BUKKIT: str = "bojans-backups"
@@ -30,11 +39,20 @@ def send_post_request(url: str, data, timeout: int = 10) -> Tuple[str, int]:
         print(f"Error posting to {url}: {e}")
         return str(e), -1
 
-def trigger_backrest_indexing(repo_id: str) -> Tuple[str, int]:
-    """Trigger backrest indexing."""
+def trigger_backrest_task(repo_id: str, task: Task) -> Tuple[str, int]:
+    """Trigger backrest task.
+
+    Task values:
+        0: TASK_NONE
+        1: TASK_INDEX_SNAPSHOTS
+        2: TASK_PRUNE
+        3: TASK_CHECK
+        4: TASK_STATS
+        5: TASK_UNLOCK
+    """
     return send_post_request(
         url=f"{BACKREST_URL}/v1.Backrest/DoRepoTask",
-        data={"task": 1, "repo_id": repo_id}
+        data={"task": task, "repo_id": repo_id}
     )
 
 def run_command(cmd: List[str], cwd: Optional[str] = None) -> Tuple[str, int]:
@@ -133,12 +151,24 @@ def main() -> None:
             send_post_request(f"{hc_url}/start", f"Asking Backrest to index {repo} snapshots")
 
             # Trigger backrest indexing
-            backrest_output, backrest_return = trigger_backrest_indexing(target)
+            backrest_output, backrest_return = trigger_backrest_task(target, Task.INDEX_SNAPSHOTS)
 
             # Post backrest indexing completion
             send_post_request(
                 f"{hc_url}/{backrest_return}",
                 f"Backrest finished indexing {repo} snapshots:\n\n{backrest_output}"
+            )
+
+            # Start backrest stats
+            send_post_request(f"{hc_url}/start", f"Asking Backrest to update stats for {repo}")
+
+            # Trigger backrest indexing
+            backrest_output, backrest_return = trigger_backrest_task(target, Task.STATS)
+
+            # Post backrest indexing completion
+            send_post_request(
+                f"{hc_url}/{backrest_return}",
+                f"Backrest finished updating stats for {repo}:\n\n{backrest_output}"
             )
 
             # Unmount and cleanup
