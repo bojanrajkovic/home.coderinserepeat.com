@@ -4,7 +4,7 @@ import subprocess
 import json
 import requests
 from typing import Tuple, Optional, List, Dict
-from enum import Enum
+from enum import IntEnum
 
 # Set environment variables
 os.environ["AWS_SECRET_ACCESS_KEY"] = "${secret_key}"
@@ -13,7 +13,7 @@ os.environ["AWS_REGION"] = "us-east-1"
 os.environ["RESTIC_PASSWORD"] = "${restic_password}"
 os.environ["XDG_CACHE_HOME"] = "/etc/sanoid/"
 
-class Task(Enum):
+class Task(IntEnum):
     NONE = 0
     INDEX_SNAPSHOTS = 1
     PRUNE = 2
@@ -26,18 +26,23 @@ BUKKIT: str = "bojans-backups"
 BACKREST_URL: str = "https://backrest.services.coderinserepeat.com"
 PVC_DATA: Dict[str,Dict[str, str]] = json.loads('${jsonencode(pvc_to_target_map)}')
 
-def send_post_request(url: str, data, timeout: int = 10) -> Tuple[str, int]:
-    """Send a POST request and return the response text and status code (0 for success)."""
-    try:
-        # Convert data to JSON if required
-        headers = { "Content-Type": "text/plain" if isinstance(data, str) else "application/json" }
-        data = data if isinstance(data, str) else json.dumps(data)
-        print(f"Posting to {url} with data: {data}, headers: {headers}")
-        response = requests.post(url, data=data, timeout=timeout, headers=headers)
-        return response.text, 0 if response.status_code == 200 else response.status_code
-    except Exception as e:
-        print(f"Error posting to {url}: {e}")
-        return str(e), -1
+def send_post_request(url: str, data, timeout: float = 60, retries: int = 5) -> Tuple[str, int]:
+    """Send a POST request and return the response text and status code (0 for success).
+
+    Will retry the request up to 'retries' times in case of exceptions.
+    """
+    headers = {"Content-Type": "text/plain" if isinstance(data, str) else "application/json"}
+    payload = data if isinstance(data, str) else json.dumps(data)
+
+    for attempt in range(1, retries + 1):
+        try:
+            print(f"Attempt {attempt}: Posting to {url} with data: {payload}, headers: {headers}")
+            response = requests.post(url, data=payload, timeout=timeout, headers=headers)
+            return response.text, 0 if response.status_code == 200 else 1
+        except Exception as e:
+            print(f"Attempt {attempt}: Error posting to {url}: {e}")
+            if attempt == retries:
+                return str(e), 1
 
 def trigger_backrest_task(repo_id: str, task: Task) -> Tuple[str, int]:
     """Trigger backrest task.
@@ -59,11 +64,12 @@ def run_command(cmd: List[str], cwd: Optional[str] = None) -> Tuple[str, int]:
     """Run a command and return output and return code."""
     result: Optional[subprocess.CompletedProcess] = None
     try:
-        result = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, check=False)
-        return result.stdout, result.returncode
-    except Exception as e:
+        print(f"Running command {subprocess.list2cmdline(cmd)} in {cwd}")
+        result = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, check=True)
+        return result.stdout, 0
+    except subprocess.CalledProcessError as e:
         print(f"Error running command {cmd}: {e}")
-        return str(e), (-1 if result is None else result.returncode)
+        return f"stdout: {e.stdout}\n\n stderr: {e.stderr}", e.returncode
 
 def main() -> None:
     # Get datasets and snapshots from environment variables
