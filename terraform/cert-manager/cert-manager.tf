@@ -4,7 +4,7 @@ resource "helm_release" "cert_manager" {
   chart            = "cert-manager"
   namespace        = var.namespace
   create_namespace = true
-  version          = "v1.17.1"
+  version          = "v1.17.2"
 
   set {
     name  = "crds.enabled"
