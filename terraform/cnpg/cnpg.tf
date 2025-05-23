@@ -4,7 +4,7 @@ resource "helm_release" "cloudnative_pg" {
   chart            = "cloudnative-pg"
   namespace        = var.namespace
   create_namespace = true
-  version          = "0.23.2"
+  version          = "0.24.0"
 
   set {
     name  = "monitoring.podMonitorEnabled"
