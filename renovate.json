@@ -7,7 +7,9 @@
   "automerge": true,
   "ignoreTests": true,
   "kubernetes": {
-    "fileMatch": ["^.*/manifests/.*\\.yaml"],
+    "managerFilePatterns": [
+      "/^.*/manifests/.*\\.yaml/"
+    ],
     "automerge": true
   },
   "terraform": {
@@ -15,7 +17,10 @@
   },
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
     }
