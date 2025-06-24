@@ -3,4 +3,4 @@ AWS_PROFILE = "default"
 KUBE_CONFIG_PATH = "{{env.HOME}}/.kube/config"
 
 [tools]
-opentofu = "1.9.1"
+opentofu = "1.10.0"
