@@ -1,15 +1,19 @@
 locals {
   env_map = tomap({
-    NODE_ENV        = "production",
-    SECRET_KEY      = var.secret_key,
-    UTILS_SECRET    = var.utils_key,
-    DATABASE_URL    = data.kubernetes_secret_v1.postgres_credentials.data["uri"],
-    PGSSLMODE       = "disable",
-    REDIS_URL       = "redis://valkey:6379",
-    URL             = "https://outline.services.coderinserepeat.com",
-    FORCE_HTTPS     = false,
-    GOOGLE_CLIENT_ID = var.google_client_id,
-    GOOGLE_CLIENT_SECRET = var.google_client_secret,
+    NODE_ENV                               = "production",
+    SECRET_KEY                             = var.secret_key,
+    UTILS_SECRET                           = var.utils_key,
+    DATABASE_URL                           = data.kubernetes_secret_v1.postgres_credentials.data["uri"],
+    PGSSLMODE                              = "disable",
+    REDIS_URL                              = "redis://valkey:6379",
+    URL                                    = "https://outline.services.coderinserepeat.com",
+    FORCE_HTTPS                            = false,
+    GOOGLE_CLIENT_ID                       = var.google_client_id,
+    GOOGLE_CLIENT_SECRET                   = var.google_client_secret,
+    FILE_STORAGE                           = "local",
+    FILE_STORAGE_UPLOAD_MAX_SIZE           = 26214400,
+    FILE_STORAGE_IMPORT_MAX_SIZE           = 26214400,
+    FILE_STORAGE_WORKSPACE_IMPORT_MAX_SIZE = 26214400
   })
 }
 
@@ -75,6 +79,28 @@ resource "kubernetes_deployment_v1" "outline" {
       }
 
       spec {
+        security_context {
+          fs_group               = 1001
+          fs_group_change_policy = "Always"
+        }
+
+        init_container {
+          name  = "fix-data-dir-ownership"
+          image = "alpine:3@sha256:a8560b36e8b8210634f77d9f7f9efd7ffa463e380b75e2e74aff4511df3ef88c"
+
+          command = [
+            "chown",
+            "-R",
+            "1001:1001",
+            "/var/lib/outline/data"
+          ]
+
+          volume_mount {
+            name       = var.data_volume_name
+            mount_path = "/var/lib/outline/data"
+          }
+        }
+
         container {
           name  = "outline"
           image = "docker.getoutline.com/outlinewiki/outline:latest"
