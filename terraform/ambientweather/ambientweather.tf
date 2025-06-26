@@ -46,7 +46,7 @@ resource "kubernetes_deployment_v1" "ambientweather" {
       spec {
         container {
           name  = "ambientweather"
-          image = "ghcr.io/neilenns/ambientweather2mqtt:latest"
+          image = "ghcr.io/neilenns/ambientweather2mqtt:latest@sha256:d37f8c46067c7ca4fcdfe9e200c8577b7723d5d9b8482730bb13459219d807ff"
 
           port {
             container_port = 8080
