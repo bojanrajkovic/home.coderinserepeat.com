@@ -35,7 +35,7 @@ resource "kubernetes_deployment_v1" "valkey" {
       spec {
         container {
           name  = "valkey"
-          image = "valkey/valkey:latest@sha256:fec42f399876eb6faf9e008570597741c87ff7662a54185593e74b09ce83d177"
+          image = "valkey/valkey:latest@sha256:620286c7b6c9db39c9be8bae9cc1f187a47d4b52d1b513bdf5e0cc869e65d55d"
 
           port {
             container_port = 6379
