@@ -16,9 +16,3 @@ resource "kubernetes_manifest" "metallb" {
 
   manifest = each.value
 }
-
-import {
-  for_each = local.manifests
-  to       = kubernetes_manifest.metallb[each.key]
-  id       = "apiVersion=${each.value.apiVersion},kind=${each.value.kind},%{if can(each.value.metadata.namespace)}namespace=${each.value.metadata.namespace},%{endif}name=${each.value.metadata.name}"
-}
