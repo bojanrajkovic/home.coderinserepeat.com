@@ -162,7 +162,7 @@ resource "kubernetes_deployment_v1" "docspell" {
         // Docspell Solr
         container {
           name  = "solr"
-          image = "docker.io/solr:9@sha256:4d7fc4c8dd0c274b43ad12b4b6b0ee2f2f350f9669858d49bcfe2518ce74c4ef"
+          image = "docker.io/solr:9@sha256:0f45b90cc4e33551c0697177bdf155098afbacc4127f3286cc2dd8a67f1b09fa"
           args  = ["-f", "-Dsolr.modules=analysis-extras"]
 
           port {
