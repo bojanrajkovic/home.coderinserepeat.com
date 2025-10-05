@@ -1,0 +1,1 @@
+../../secrets/lidarr/terraform.tfvars
