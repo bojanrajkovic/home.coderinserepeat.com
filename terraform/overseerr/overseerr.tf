@@ -62,7 +62,7 @@ resource "kubernetes_deployment_v1" "overseerr" {
       spec {
         container {
           name  = "overseerr"
-          image = "sctx/overseerr:latest"
+          image = "sctx/overseerr:latest@sha256:4f38f58d68555004d3f487a4c5cbe2823e6a0942d946a25a2d9391d8492240a4"
 
           env {
             name  = "LOG_LEVEL"

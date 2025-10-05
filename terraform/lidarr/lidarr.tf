@@ -62,7 +62,7 @@ resource "kubernetes_deployment_v1" "lidarr" {
       spec {
         container {
           name  = "lidarr"
-          image = "lscr.io/linuxserver/lidarr:latest"
+          image = "lscr.io/linuxserver/lidarr:latest@sha256:2452f5df3b6e3a267c419382a1e492c6831a5e46a01c3aec11c61a7810e15d6f"
 
           env {
             name  = "PUID"
