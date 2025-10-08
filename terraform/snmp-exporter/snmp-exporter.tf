@@ -50,7 +50,7 @@ resource "kubernetes_deployment_v1" "snmp_exporter" {
       spec {
         container {
           name  = "snmp-exporter"
-          image = "prom/snmp-exporter:v0.29.0"
+          image = "prom/snmp-exporter:v0.29.0@sha256:272ff087c314fb1e384b7ba7e555f020cc0c072fb23f0dc1d1cb51b48067efdc"
 
           args = [
             "--config.file=/etc/prometheus/snmp.yml",
