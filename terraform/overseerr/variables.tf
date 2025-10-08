@@ -3,6 +3,11 @@ variable "overseerr_host" {
   description = "The hostname at which to expose the Overseerr deployment"
 }
 
+variable "overseerr_tailscale_funnel_host" {
+  type        = string
+  description = "The Tailscale hostname for public Funnel access"
+}
+
 variable "namespace_name" {
   type        = string
   description = "The Kubernetes namespace to deploy everything to"

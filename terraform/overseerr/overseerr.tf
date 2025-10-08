@@ -168,3 +168,32 @@ resource "kubernetes_ingress_v1" "overseerr" {
     }
   }
 }
+
+resource "kubernetes_ingress_v1" "overseerr_tailscale_funnel" {
+  metadata {
+    name      = "overseerr-funnel"
+    namespace = kubernetes_namespace.overseerr.metadata[0].name
+
+    annotations = {
+      "tailscale.com/funnel" = "true"
+    }
+  }
+
+  spec {
+    ingress_class_name = "tailscale"
+
+    default_backend {
+      service {
+        name = "overseerr"
+
+        port {
+          number = 80
+        }
+      }
+    }
+
+    tls {
+      hosts = [var.overseerr_tailscale_funnel_host]
+    }
+  }
+}
