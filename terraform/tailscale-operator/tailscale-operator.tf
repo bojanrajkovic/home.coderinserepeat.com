@@ -54,3 +54,31 @@ resource "kubernetes_manifest" "tailscale_operator_resources" {
     kubernetes_manifest.tailscale_oauth_credentials
   ]
 }
+
+# Create Connector for subnet router to advertise cluster networks
+resource "kubernetes_manifest" "tailscale_subnet_router" {
+  manifest = {
+    apiVersion = "tailscale.com/v1alpha1"
+    kind       = "Connector"
+
+    metadata = {
+      name      = "k8s-subnet-router"
+      namespace = kubernetes_namespace_v1.tailscale.metadata[0].name
+    }
+
+    spec = {
+      hostname = var.subnet_router_hostname
+
+      subnetRouter = {
+        advertiseRoutes = var.advertised_routes
+      }
+
+      tags = ["tag:k8s"]
+    }
+  }
+
+  depends_on = [
+    kubernetes_manifest.tailscale_operator_resources,
+    kubernetes_manifest.tailscale_oauth_credentials
+  ]
+}
