@@ -1,0 +1,1 @@
+../../secrets/snmp-exporter/terraform.tfvars
