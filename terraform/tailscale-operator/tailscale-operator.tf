@@ -62,8 +62,7 @@ resource "kubernetes_manifest" "tailscale_subnet_router" {
     kind       = "Connector"
 
     metadata = {
-      name      = "k8s-subnet-router"
-      namespace = kubernetes_namespace_v1.tailscale.metadata[0].name
+      name = "k8s-subnet-router"
     }
 
     spec = {
