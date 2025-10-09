@@ -72,7 +72,7 @@ resource "kubernetes_deployment_v1" "z2m_nginx" {
       spec {
         container {
           name  = "nginx"
-          image = "nginx:alpine@sha256:52175fc0394e97029664721dfdb76a8af1e3045532ab5fb2249e555d50f347bc"
+          image = "nginx:alpine@sha256:681f39378fc752af9aa9d884e8726fe3be9658550ad233c400b3955345d23ec7"
 
           port {
             container_port = 80
