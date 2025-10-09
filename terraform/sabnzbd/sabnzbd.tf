@@ -141,7 +141,7 @@ resource "kubernetes_deployment_v1" "sabnzbd" {
 
         container {
           name  = "sabnzbd"
-          image = "lscr.io/linuxserver/sabnzbd:latest@sha256:65aa549ef6ef694ad15f19af1f290847ea6898707a330142c9763bcc5981511b"
+          image = "lscr.io/linuxserver/sabnzbd:latest@sha256:b425e5f48e13aabb7c6d9e37579629925ad44f77ae0d841edfd776399457f671"
 
           env {
             name  = "PUID"
