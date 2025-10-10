@@ -1,0 +1,1 @@
+../../secrets/esphome-builder/terraform.tfvars
