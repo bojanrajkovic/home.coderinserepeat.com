@@ -98,48 +98,6 @@ resource "kubernetes_deployment_v1" "sabnzbd" {
         }
 
         container {
-          name  = "gluetun"
-          image = "docker.io/qmcgaw/gluetun:v3.40.0@sha256:2b42bfa046757145a5155acece417b65b4443c8033fb88661a8e9dcf7fda5a00"
-
-          security_context {
-            capabilities {
-              add = ["NET_ADMIN"]
-            }
-          }
-
-          dynamic "env" {
-            for_each = nonsensitive(keys(var.gluetun_configuration))
-
-            content {
-              name  = env.value
-              value = var.gluetun_configuration[env.value]
-            }
-          }
-
-          env {
-            name = "WIREGUARD_PRIVATE_KEY"
-
-            value_from {
-              secret_key_ref {
-                name = var.airvpn_credentials_secret
-                key  = "password"
-              }
-            }
-          }
-
-          env {
-            name = "WIREGUARD_PRESHARED_KEY"
-
-            value_from {
-              secret_key_ref {
-                name = var.airvpn_credentials_secret
-                key  = "username"
-              }
-            }
-          }
-        }
-
-        container {
           name  = "sabnzbd"
           image = "lscr.io/linuxserver/sabnzbd:latest@sha256:b425e5f48e13aabb7c6d9e37579629925ad44f77ae0d841edfd776399457f671"
 
