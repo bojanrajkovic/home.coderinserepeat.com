@@ -107,7 +107,7 @@ resource "kubernetes_deployment_v1" "vector" {
 
       spec {
         container {
-          image = "timberio/vector:0.50.0-debian"
+          image = "timberio/vector:0.50.0-debian@sha256:8e81f992197125f736e1fe5d73117ca6b69a0bb69cf3633f82b9233c9769c9c1"
           name  = "vector"
 
           args = [
