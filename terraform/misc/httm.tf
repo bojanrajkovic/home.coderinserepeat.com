@@ -12,7 +12,7 @@ resource "system_file" "httm_gpg_key" {
 }
 
 resource "system_file" "httm_sources_list" {
-  path   = "/etc/apt/sources.list.d/kimono-koans.list"
+  path   = "/etc/apt/sources.list.d/kimono-koans.sources"
   source = "https://raw.githubusercontent.com/kimono-koans/ppa/main/kimono-koans.list"
 }
 
