@@ -25,54 +25,77 @@
   "commitMessageAction": "update",
   "commitMessageExtra": "to {{#if isPinDigest}}{{{newDigestShort}}}{{else}}{{#if isMajor}}{{prettyNewMajor}}{{else}}{{#if isSingleVersion}}{{prettyNewVersion}}{{else}}{{#if newValue}}{{{newValue}}}{{else}}{{{newDigestShort}}}{{/if}}{{/if}}{{/if}}{{/if}}",
   "commitMessageTopic": "{{depName}}",
-  "labels": ["dependencies"],
+  "labels": [
+    "dependencies"
+  ],
   "assigneesFromCodeOwners": true,
   "reviewersFromCodeOwners": true,
   "lockFileMaintenance": {
     "enabled": true,
     "automerge": true,
-    "schedule": ["before 6am on monday"]
+    "schedule": [
+      "before 6am on monday"
+    ]
   },
   "vulnerabilityAlerts": {
     "enabled": true,
-    "labels": ["security"],
+    "labels": [
+      "security"
+    ],
     "automerge": true,
     "assignees": [],
     "reviewers": []
   },
   "kubernetes": {
-    "fileMatch": [
-      "(^|/)kubernetes/.+\\.ya?ml$",
-      "(^|/)manifests/.+\\.ya?ml$",
-      "(^|/)k8s/.+\\.ya?ml$"
+    "managerFilePatterns": [
+      "/(^|/)kubernetes/.+\\.ya?ml$/",
+      "/(^|/)manifests/.+\\.ya?ml$/",
+      "/(^|/)k8s/.+\\.ya?ml$/"
     ]
   },
   "helm-values": {
-    "fileMatch": ["(^|/)values\\.ya?ml$", "(^|/)values/.+\\.ya?ml$"]
+    "managerFilePatterns": [
+      "/(^|/)values\\.ya?ml$/",
+      "/(^|/)values/.+\\.ya?ml$/"
+    ]
   },
   "terraform": {
-    "fileMatch": ["\\.tf$", "\\.tofu$"]
+    "managerFilePatterns": [
+      "/\\.tf$/",
+      "/\\.tofu$/"
+    ]
   },
-  "regexManagers": [
+  "customManagers": [
     {
+      "customType": "regex",
       "description": "Update OpenTofu version in mise config",
-      "fileMatch": ["^\\.mise\\.toml$"],
-      "matchStrings": ["opentofu\\s*=\\s*\"(?<currentValue>.*?)\""],
+      "managerFilePatterns": [
+        "/^\\.mise\\.toml$/"
+      ],
+      "matchStrings": [
+        "opentofu\\s*=\\s*\"(?<currentValue>.*?)\""
+      ],
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "opentofu/opentofu",
       "versioningTemplate": "semver"
     },
     {
+      "customType": "regex",
       "description": "Update Docker image tags with digest in Terraform",
-      "fileMatch": ["\\.tf$"],
+      "managerFilePatterns": [
+        "/\\.tf$/"
+      ],
       "matchStrings": [
         "image\\s*=\\s*\"(?<depName>[^:]+):(?<currentValue>[^@\"]+)@(?<currentDigest>sha256:[a-f0-9]+)\""
       ],
       "datasourceTemplate": "docker"
     },
     {
+      "customType": "regex",
       "description": "Update Docker image tags without digest in Terraform",
-      "fileMatch": ["\\.tf$"],
+      "managerFilePatterns": [
+        "/\\.tf$/"
+      ],
       "matchStrings": [
         "image\\s*=\\s*\"(?<depName>[^:]+):(?<currentValue>[^@\"]+)\"\\s*$"
       ],
@@ -82,104 +105,172 @@
   "packageRules": [
     {
       "description": "Automerge non-major updates for stable versions",
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
     },
     {
       "description": "Group all GitHub Actions updates",
       "groupName": "GitHub Actions",
-      "matchManagers": ["github-actions"],
+      "matchManagers": [
+        "github-actions"
+      ],
       "automerge": true,
-      "schedule": ["every weekend"]
+      "schedule": [
+        "every weekend"
+      ]
     },
     {
       "description": "Group pre-commit hook updates",
       "groupName": "pre-commit hooks",
-      "matchManagers": ["pre-commit"],
+      "matchManagers": [
+        "pre-commit"
+      ],
       "automerge": true,
-      "schedule": ["every weekend"]
+      "schedule": [
+        "every weekend"
+      ]
     },
     {
       "description": "Terraform lock file updates",
-      "matchManagers": ["terraform"],
-      "matchDepTypes": ["provider"],
+      "matchManagers": [
+        "terraform"
+      ],
+      "matchDepTypes": [
+        "provider"
+      ],
       "groupName": "Terraform providers",
       "automerge": true,
-      "registryUrls": ["https://registry.opentofu.org"]
+      "registryUrls": [
+        "https://registry.opentofu.org"
+      ]
     },
     {
       "description": "Terraform module updates",
-      "matchManagers": ["terraform"],
-      "matchDepTypes": ["module"],
+      "matchManagers": [
+        "terraform"
+      ],
+      "matchDepTypes": [
+        "module"
+      ],
       "automerge": true,
-      "registryUrls": ["https://registry.opentofu.org"]
+      "registryUrls": [
+        "https://registry.opentofu.org"
+      ]
     },
     {
       "description": "Helm chart updates",
-      "matchManagers": ["helmv3", "helm-values"],
+      "matchManagers": [
+        "helmv3",
+        "helm-values"
+      ],
       "groupName": "Helm charts",
       "automerge": true,
-      "schedule": ["after 10pm every weekday", "every weekend"]
+      "schedule": [
+        "after 10pm every weekday",
+        "every weekend"
+      ]
     },
     {
       "description": "Kubernetes manifest updates",
-      "matchManagers": ["kubernetes"],
+      "matchManagers": [
+        "kubernetes"
+      ],
       "automerge": true
     },
     {
       "description": "Docker image updates in Terraform",
-      "matchManagers": ["regex"],
-      "matchFiles": ["terraform/**/*.tf"],
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchFileNames": [
+        "terraform/**/*.tf"
+      ],
       "automerge": true,
       "separateMinorPatch": true
     },
     {
       "description": "Pin Docker digests for production images",
-      "matchDatasources": ["docker"],
+      "matchDatasources": [
+        "docker"
+      ],
       "pinDigests": true,
       "automerge": true
     },
     {
       "description": "Major version updates require manual review",
-      "matchUpdateTypes": ["major"],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "automerge": false,
-      "labels": ["major-update"]
+      "labels": [
+        "major-update"
+      ]
     },
     {
       "description": "Separate major OpenTofu updates",
-      "matchPackageNames": ["opentofu/opentofu"],
-      "matchUpdateTypes": ["major"],
+      "matchPackageNames": [
+        "opentofu/opentofu"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "automerge": false,
-      "labels": ["opentofu", "major-update"]
+      "labels": [
+        "opentofu",
+        "major-update"
+      ]
     },
     {
       "description": "Security updates get priority",
-      "matchUpdateTypes": ["patch"],
-      "matchPackagePatterns": ["*"],
+      "matchUpdateTypes": [
+        "patch"
+      ],
       "matchCurrentVersion": "!/^0/",
       "automerge": true,
-      "prPriority": 10
+      "prPriority": 10,
+      "matchPackageNames": [
+        "*"
+      ]
     },
     {
       "description": "AWS provider updates",
-      "matchDatasources": ["terraform-provider"],
-      "matchPackageNames": ["hashicorp/aws"],
+      "matchDatasources": [
+        "terraform-provider"
+      ],
+      "matchPackageNames": [
+        "hashicorp/aws"
+      ],
       "groupName": "AWS provider",
       "automerge": true,
-      "schedule": ["every weekend"]
+      "schedule": [
+        "every weekend"
+      ]
     },
     {
       "description": "Kubernetes provider updates",
-      "matchDatasources": ["terraform-provider"],
-      "matchPackageNames": ["hashicorp/kubernetes"],
+      "matchDatasources": [
+        "terraform-provider"
+      ],
+      "matchPackageNames": [
+        "hashicorp/kubernetes"
+      ],
       "groupName": "Kubernetes provider",
       "automerge": true
     },
     {
       "description": "Helm provider updates",
-      "matchDatasources": ["terraform-provider"],
-      "matchPackageNames": ["hashicorp/helm"],
+      "matchDatasources": [
+        "terraform-provider"
+      ],
+      "matchPackageNames": [
+        "hashicorp/helm"
+      ],
       "groupName": "Helm provider",
       "automerge": true
     }
