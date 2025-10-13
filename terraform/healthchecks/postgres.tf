@@ -36,8 +36,8 @@ resource "kubernetes_manifest" "healthchecks_cluster" {
                   namespace = kubernetes_namespace.healthchecks_io.metadata[0].name
 
                   annotations = {
-                    "external-dns.alpha.kubernetes.io/hostname"  = var.postgres_hostname
-                    "metallb.universe.tf/ip-allocated-from-pool" = "metallb-address-pool"
+                    "external-dns.alpha.kubernetes.io/hostname" = var.postgres_hostname
+                    "metallb.io/ip-allocated-from-pool"         = "metallb-address-pool"
                   }
                 }
 

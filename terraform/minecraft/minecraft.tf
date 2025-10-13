@@ -146,9 +146,8 @@ resource "kubernetes_service_v1" "minecraft" {
     namespace = var.namespace_name
 
     annotations = {
-      "external-dns.alpha.kubernetes.io/hostname"  = var.minecraft_host
-      "metallb.universe.tf/ip-allocated-from-pool" = "metallb-address-pool"
-      "metallb.io/ip-allocated-from-pool"          = "metallb-address-pool"
+      "external-dns.alpha.kubernetes.io/hostname" = var.minecraft_host
+      "metallb.io/ip-allocated-from-pool"         = "metallb-address-pool"
     }
   }
 

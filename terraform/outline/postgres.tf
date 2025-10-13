@@ -46,8 +46,8 @@ resource "kubernetes_manifest" "outline_cluster" {
                   namespace = kubernetes_namespace_v1.outline.metadata[0].name
 
                   annotations = {
-                    "external-dns.alpha.kubernetes.io/hostname"  = var.postgres_hostname
-                    "metallb.universe.tf/ip-allocated-from-pool" = "metallb-address-pool"
+                    "external-dns.alpha.kubernetes.io/hostname" = var.postgres_hostname
+                    "metallb.io/ip-allocated-from-pool"         = "metallb-address-pool"
                   }
                 }
 
