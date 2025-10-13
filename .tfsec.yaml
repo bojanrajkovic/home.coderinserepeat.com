@@ -1,0 +1,27 @@
+# tfsec configuration for homelab infrastructure
+# https://aquasecurity.github.io/tfsec/
+
+# Minimum severity level to report
+minimum_severity: MEDIUM
+
+# Exclude rules that don't apply to homelab environments
+exclude:
+  # S3 bucket rules - some are overly strict for private homelab
+  - aws-s3-enable-versioning  # Not all buckets need versioning
+  - aws-s3-enable-bucket-logging  # Logging not required for all buckets
+
+  # IAM rules that are too restrictive for homelab automation
+  - aws-iam-no-policy-wildcards  # Some policies need wildcards for dynamic resources
+
+  # Encryption rules that may be overkill for homelab
+  - aws-s3-encryption-customer-key  # KMS may be overkill for some buckets
+
+# Include specific checks
+# include:
+#   - aws-s3-block-public-acls
+#   - aws-s3-block-public-policy
+#   - aws-iam-no-user-attached-policies
+
+# Severity overrides (optional)
+# severity_overrides:
+#   aws-s3-enable-bucket-logging: LOW
