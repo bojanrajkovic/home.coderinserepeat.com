@@ -27,6 +27,7 @@ jobs:
         with:
           submodules: true
           fetch-depth: 1
+          token: ${{ secrets.CHECKOUT_PAT }}
 
       - name: Find Terraform modules
         id: find-modules
