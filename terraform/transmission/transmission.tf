@@ -1,3 +1,9 @@
+locals {
+  # Shift the image name around so that Renovate doesn't try to upgrade it…
+  # because Transmission 4.0.6 is not supported most places.
+  image_name = "lscr.io/linuxserver/transmission:4.0.5"
+}
+
 resource "kubernetes_namespace_v1" "transmission" {
   metadata {
     name = var.namespace_name
@@ -141,7 +147,7 @@ resource "kubernetes_deployment_v1" "transmission" {
 
         container {
           name  = "transmission"
-          image = "lscr.io/linuxserver/transmission:4.0.6@sha256:176de05ac125b6a7d781275419e54e02751c7e00620b0a45141cbf1ee6f7b65c"
+          image = local.image_name
 
           env {
             name  = "PUID"
