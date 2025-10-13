@@ -27,7 +27,7 @@ resource "aws_iam_policy" "restic_s3_policy" {
           "s3:*",
         ],
         "Resource" = [
-          "${data.aws_s3_bucket.backups.arn}",
+          data.aws_s3_bucket.backups.arn,
           "${data.aws_s3_bucket.backups.arn}/*"
         ]
       }

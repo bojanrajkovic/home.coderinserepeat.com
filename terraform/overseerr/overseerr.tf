@@ -84,14 +84,14 @@ resource "kubernetes_deployment_v1" "overseerr" {
             protocol       = "TCP"
           }
 
-          // Configuration
+          # Configuration
           volume_mount {
             mount_path = "/app/config"
             name       = var.data_volume_name
           }
         }
 
-        // Configuration
+        # Configuration
         volume {
           name = var.data_volume_name
 

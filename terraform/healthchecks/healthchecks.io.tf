@@ -150,7 +150,7 @@ resource "kubernetes_deployment_v1" "healthchecks_io" {
             protocol       = "TCP"
           }
 
-          // Configuration
+          # Configuration
           volume_mount {
             mount_path = "/data"
             name       = var.data_volume_name
@@ -163,7 +163,7 @@ resource "kubernetes_deployment_v1" "healthchecks_io" {
           }
         }
 
-        // Configuration
+        # Configuration
         volume {
           name = var.data_volume_name
 

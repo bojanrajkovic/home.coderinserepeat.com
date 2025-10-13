@@ -3,6 +3,8 @@ locals {
 }
 
 terraform {
+  required_version = ">= 1.8, < 2.0"
+
   backend "s3" {
     bucket = "rajkovic-homelab-tf-state"
     key    = "k8s/${local.module}.tfstate"
@@ -28,6 +30,11 @@ terraform {
     healthchecksio = {
       version = "~> 2"
       source  = "kristofferahl/healthchecksio"
+    }
+
+    random = {
+      version = "~> 3"
+      source  = "hashicorp/random"
     }
   }
 }

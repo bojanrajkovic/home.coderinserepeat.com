@@ -84,7 +84,7 @@ resource "kubernetes_deployment_v1" "lidarr" {
             protocol       = "TCP"
           }
 
-          // Configuration
+          # Configuration
           volume_mount {
             mount_path = "/config"
             name       = var.data_volume_name
@@ -96,20 +96,20 @@ resource "kubernetes_deployment_v1" "lidarr" {
             read_only  = true
           }
 
-          // Music
+          # Music
           volume_mount {
             mount_path = "/music"
             name       = "music"
           }
 
-          // Downloads
+          # Downloads
           volume_mount {
             mount_path = "/downloads"
             name       = "downloads"
           }
         }
 
-        // Configuration
+        # Configuration
         volume {
           name = var.data_volume_name
 
@@ -127,7 +127,7 @@ resource "kubernetes_deployment_v1" "lidarr" {
           }
         }
 
-        // Music
+        # Music
         volume {
           name = "music"
 
@@ -137,7 +137,7 @@ resource "kubernetes_deployment_v1" "lidarr" {
           }
         }
 
-        // Downloads
+        # Downloads
         volume {
           name = "downloads"
 

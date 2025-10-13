@@ -116,7 +116,7 @@ resource "kubernetes_deployment_v1" "vector" {
           ]
 
           env {
-            name = "VECTOR_LOG"
+            name  = "VECTOR_LOG"
             value = "debug"
           }
 

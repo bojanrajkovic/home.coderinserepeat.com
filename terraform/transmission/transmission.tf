@@ -168,7 +168,7 @@ resource "kubernetes_deployment_v1" "transmission" {
             protocol       = "TCP"
           }
 
-          // Configuration
+          # Configuration
           volume_mount {
             mount_path = "/config"
             name       = var.data_volume_name
@@ -180,7 +180,7 @@ resource "kubernetes_deployment_v1" "transmission" {
             read_only  = true
           }
 
-          // Data
+          # Data
           dynamic "volume_mount" {
             for_each = var.host_volumes
 
@@ -191,7 +191,7 @@ resource "kubernetes_deployment_v1" "transmission" {
           }
         }
 
-        // Configuration
+        # Configuration
         volume {
           name = var.data_volume_name
 
@@ -209,7 +209,7 @@ resource "kubernetes_deployment_v1" "transmission" {
           }
         }
 
-        // Data
+        # Data
         dynamic "volume" {
           for_each = var.host_volumes
 

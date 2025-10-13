@@ -82,7 +82,7 @@ resource "kubernetes_deployment_v1" "radarr" {
             protocol       = "TCP"
           }
 
-          // Configuration
+          # Configuration
           volume_mount {
             mount_path = "/config"
             name       = var.data_volume_name
@@ -94,7 +94,7 @@ resource "kubernetes_deployment_v1" "radarr" {
             read_only  = true
           }
 
-          // Data
+          # Data
           dynamic "volume_mount" {
             for_each = var.host_volumes
 
@@ -105,7 +105,7 @@ resource "kubernetes_deployment_v1" "radarr" {
           }
         }
 
-        // Configuration
+        # Configuration
         volume {
           name = var.data_volume_name
 
@@ -123,7 +123,7 @@ resource "kubernetes_deployment_v1" "radarr" {
           }
         }
 
-        // Data
+        # Data
         dynamic "volume" {
           for_each = var.host_volumes
 

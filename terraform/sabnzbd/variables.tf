@@ -39,9 +39,3 @@ variable "airvpn_credentials_1password_vault_item_id" {
   sensitive   = true
   description = "The 1Password item ID to load AirVPN credentials from."
 }
-
-variable "gluetun_configuration" {
-  type        = map(string)
-  sensitive   = true
-  description = "The Gluetun configuration for VPN setup."
-}

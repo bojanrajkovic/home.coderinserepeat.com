@@ -2,9 +2,9 @@
     "[terraform]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "gamunu.opentofu",
-        "editor.tabSize": 2, // optionally
+        "editor.tabSize": 2
       },
       "[terraform-vars]": {
-        "editor.tabSize": 2 // optionally
-      },
+        "editor.tabSize": 2
+      }
 }

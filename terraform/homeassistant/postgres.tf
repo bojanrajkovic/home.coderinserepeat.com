@@ -43,7 +43,7 @@ resource "kubernetes_manifest" "recorder_cluster" {
               selectorType = "rw"
               serviceTemplate = {
                 metadata = {
-                  name = "ha-recorder"
+                  name      = "ha-recorder"
                   namespace = kubernetes_namespace_v1.home_assistant[0].metadata[0].name
 
                   annotations = {
@@ -65,7 +65,7 @@ resource "kubernetes_manifest" "recorder_cluster" {
 }
 
 resource "kubernetes_manifest" "recorder_cluster_monitor" {
-  count = 0
+  count      = 0
   depends_on = [kubernetes_manifest.recorder_cluster]
 
   manifest = {

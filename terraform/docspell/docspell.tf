@@ -99,7 +99,7 @@ resource "kubernetes_deployment_v1" "docspell" {
           fs_group_change_policy = "OnRootMismatch"
         }
 
-        // Docspell Restserver
+        # Docspell Restserver
         container {
           name  = "restserver"
           image = "docker.io/docspell/restserver:v0.42.0@sha256:7184e723dcdd5241f02372748ad0aab6caca0722478abc892dc63c663e399f2d"
@@ -116,20 +116,20 @@ resource "kubernetes_deployment_v1" "docspell" {
             value = "America/New_York"
           }
 
-          // Configuration
+          # Configuration
           volume_mount {
             mount_path = "/var/docspell"
             name       = var.docspell_configuration_volume
           }
 
-          // Data
+          # Data
           volume_mount {
             mount_path = "/var/spool/docspell/docs"
             name       = var.docspell_data_volume
           }
         }
 
-        // Docspell Joex
+        # Docspell Joex
         container {
           name  = "joex"
           image = "docker.io/docspell/joex:v0.42.0@sha256:b21d2285e49c0869d827dcba631ff10d574c673eb8df2ebf7fc1f326d0afd581"
@@ -146,20 +146,20 @@ resource "kubernetes_deployment_v1" "docspell" {
             value = "America/New_York"
           }
 
-          // Configuration
+          # Configuration
           volume_mount {
             mount_path = "/var/docspell"
             name       = var.docspell_configuration_volume
           }
 
-          // Data
+          # Data
           volume_mount {
             mount_path = "/var/spool/docspell/docs"
             name       = var.docspell_data_volume
           }
         }
 
-        // Docspell Solr
+        # Docspell Solr
         container {
           name  = "solr"
           image = "docker.io/solr:9@sha256:474f49c476d6742e1387d08971fb23f4bdbdf547c753838522e0c1a5cf07f044"
@@ -171,7 +171,7 @@ resource "kubernetes_deployment_v1" "docspell" {
             protocol       = "TCP"
           }
 
-          // Configuration + Data
+          # Configuration + Data
           volume_mount {
             mount_path = "/var/solr"
             name       = var.solr_data_volume

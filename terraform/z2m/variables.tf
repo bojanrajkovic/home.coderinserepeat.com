@@ -31,12 +31,6 @@ variable "z2m_host" {
   description = "Hostname for zigbee2mqtt web interface ingress"
 }
 
-variable "timezone" {
-  type        = string
-  default     = "America/New_York"
-  description = "Timezone for zigbee2mqtt"
-}
-
 variable "log_level" {
   type        = string
   default     = "info"

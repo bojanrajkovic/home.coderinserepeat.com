@@ -8,13 +8,6 @@ resource "kubernetes_namespace" "ambientweather" {
   }
 }
 
-data "kubernetes_secret_v1" "postgres_credentials" {
-  metadata {
-    name      = "healthchecks-cluster-app"
-    namespace = var.namespace_name
-  }
-}
-
 resource "kubernetes_deployment_v1" "ambientweather" {
   metadata {
     name      = "ambientweather"
@@ -74,27 +67,27 @@ resource "kubernetes_deployment_v1" "ambientweather" {
           }
 
           env {
-            name = "TZ"
+            name  = "TZ"
             value = "America/New_York"
           }
 
           env {
-            name = "LOCALE"
+            name  = "LOCALE"
             value = "en-US"
           }
 
           env {
-            name = "LOG_LEVEL"
+            name  = "LOG_LEVEL"
             value = "debug"
           }
 
           env {
-            name = "MQTT_REJECT_UNAUTHORIZED"
+            name  = "MQTT_REJECT_UNAUTHORIZED"
             value = "false"
           }
 
           env {
-            name = "PORT"
+            name  = "PORT"
             value = "8080"
           }
         }

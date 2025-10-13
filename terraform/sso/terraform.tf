@@ -3,6 +3,8 @@ locals {
 }
 
 terraform {
+  required_version = ">= 1.8, < 2.0"
+
   backend "s3" {
     bucket = "rajkovic-homelab-tf-state"
     key    = "aws/${local.module}.tfstate"

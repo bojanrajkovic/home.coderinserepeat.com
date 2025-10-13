@@ -6,10 +6,6 @@ data "aws_cloudfront_distribution" "test_coderinserepeat_com" {
   id = var.test_coderinserepeat_com_cloudformation_distribution_id
 }
 
-data "aws_s3_bucket" "test_coderinserepeat_com" {
-  bucket = "test.coderinserepeat.com"
-}
-
 resource "aws_route53_record" "coderinserepeat_com_A" {
   type    = "A"
   name    = "coderinserepeat.com"

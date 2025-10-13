@@ -174,7 +174,7 @@ resource "kubernetes_deployment_v1" "scrutiny" {
           }
         }
 
-        // Backup volumes
+        # Backup volumes
         dynamic "volume" {
           for_each = local.host_volumes
 

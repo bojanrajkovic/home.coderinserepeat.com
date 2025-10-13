@@ -148,7 +148,7 @@ resource "kubernetes_deployment_v1" "slskd" {
             protocol       = "TCP"
           }
 
-          // Configuration
+          # Configuration
           volume_mount {
             mount_path = "/app"
             name       = var.config_volume_name
@@ -160,7 +160,7 @@ resource "kubernetes_deployment_v1" "slskd" {
             read_only  = true
           }
 
-          // Data
+          # Data
           dynamic "volume_mount" {
             for_each = var.host_volumes
 
@@ -171,7 +171,7 @@ resource "kubernetes_deployment_v1" "slskd" {
           }
         }
 
-        // Configuration
+        # Configuration
         volume {
           name = var.config_volume_name
 
@@ -189,7 +189,7 @@ resource "kubernetes_deployment_v1" "slskd" {
           }
         }
 
-        // Data
+        # Data
         dynamic "volume" {
           for_each = var.host_volumes
 

@@ -68,7 +68,7 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
           args = [
             "icloudpd",
             "--directory", "/data/photos/iCloud (${title(each.key)})",
-            "--username", "${each.value}",
+            "--username", each.value,
             "--watch-with-interval", "3600",
             "--auto-delete",
             "--align-raw", "original",
@@ -100,7 +100,7 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
             name       = var.data_volume_name
           }
 
-          // Data
+          # Data
           dynamic "volume_mount" {
             for_each = var.icloud_pd_host_volumes
 
@@ -128,7 +128,7 @@ resource "kubernetes_deployment_v1" "icloud_pd" {
           }
         }
 
-        // Data
+        # Data
         dynamic "volume" {
           for_each = var.icloud_pd_host_volumes
 

@@ -35,11 +35,11 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      labels: 
+      labels:
         name: smarter-device-manager
       annotations:
         node.kubernetes.io/bootstrap-checkpoint: "true"
-    spec: 
+    spec:
       nodeSelector:
         smarter-device-manager: enabled
       priorityClassName: "system-node-critical"
