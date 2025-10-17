@@ -85,11 +85,8 @@ resource "system_file" "sanoid_post_snapshot_py" {
   })
 }
 
-output "backrest_config_json" {
-  description = "JSON blob to copy into Backrest's config to have these PVC backups show up"
-  sensitive   = true
-
-  value = jsonencode([
+locals {
+  backrest_config_json = jsonencode([
     for pv in data.kubernetes_resources.pvs.objects : {
       id       = "${pv.spec.claimRef.namespace}--${pv.spec.claimRef.name}",
       guid     = replace("${pv.spec.claimRef.uid}${pv.spec.claimRef.uid}", "-", "")
@@ -116,6 +113,29 @@ output "backrest_config_json" {
       autoUnlock    = true,
       commandPrefix = {}
   } if pv.spec.storageClassName == var.data_volume_storage_class])
+}
+
+output "backrest_config_json" {
+  description = "JSON blob to copy into Backrest's config to have these PVC backups show up"
+  sensitive   = true
+  value       = local.backrest_config_json
+}
+
+resource "null_resource" "update_backrest_config" {
+  # Trigger when the config changes
+  triggers = {
+    config_hash = sha256(local.backrest_config_json)
+  }
+
+  # Run the script to merge and update the config
+  provisioner "local-exec" {
+    command     = "./merge-backrest-config.sh"
+    working_dir = path.module
+  }
+
+  depends_on = [
+    kubernetes_deployment_v1.backrest
+  ]
 }
 
 resource "system_file" "sanoid_service" {
