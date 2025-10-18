@@ -11,11 +11,6 @@ resource "system_file" "httm_gpg_key" {
   group  = "root"
 }
 
-resource "system_file" "httm_sources_list" {
-  path   = "/etc/apt/sources.list.d/kimono-koans.sources"
-  source = "https://raw.githubusercontent.com/kimono-koans/ppa/main/kimono-koans.list"
-}
-
 resource "system_packages_apt" "uuid-runtime" {
   package {
     name = "uuid-runtime"

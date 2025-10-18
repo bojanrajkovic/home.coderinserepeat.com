@@ -17,12 +17,20 @@ resource "kubernetes_manifest" "traefik_https_redirect_config" {
             }
           }
           web = {
-            redirectTo = {
-              port = "websecure"
+            redirections = {
+              entrypoint = {
+                to        = "websecure"
+                scheme    = "https"
+                permanent = true
+              }
             }
           }
         }
       })
     }
+  }
+
+  field_manager {
+    force_conflicts = true
   }
 }
